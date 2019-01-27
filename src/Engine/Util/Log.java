@@ -7,6 +7,6 @@ public class Log {
 	}
 
 	public static void logInfo(String input){
-		System.err.println("Info: " + input);
+		System.out.println("Info: " + input);
 	}
 }
