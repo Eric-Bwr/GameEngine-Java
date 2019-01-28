@@ -32,7 +32,6 @@ public class Window {
 		glfwWindowHint(GLFW_VERSION_MINOR, 2);
 		glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE);
 		glfwWindowHint(GLFW_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
 		window = glfwCreateWindow(width, height, title, NULL, NULL);
 		if(window == NULL){
 			Log.logError("Failed to create Window!");
@@ -45,6 +44,8 @@ public class Window {
 		initCallbacks();
 		GL.createCapabilities();
 		Log.logInfo(glGetString(GL_VERSION));
+		Shader shader = new Shader("res/Shaders/Basic.glsl");
+
 	}
 
 	private void initCallbacks(){
