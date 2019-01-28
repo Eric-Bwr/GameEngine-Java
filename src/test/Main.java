@@ -1,11 +1,11 @@
-package Test;
+package test;
 
-import Engine.GameEngine;
+import engine.GameEngine;
 
 public class Main {
 
 	//JUST  FOR TESTING PURPOSE; MAY BE MOVED IN SEPERATE FILE FOR HUMAN EYES
-	private static final String TITLE = "Engine";
+	private static final String TITLE = "engine";
 	private static final int WIDTH = 600;
 	private static final int HEIGHT = 600;
 

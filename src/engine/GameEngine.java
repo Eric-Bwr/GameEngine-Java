@@ -1,6 +1,6 @@
-package Engine;
+package engine;
 
-import Engine.Rendering.Window;
+import engine.display.Window;
 
 public class GameEngine implements Runnable{
 
