@@ -1,16 +1,17 @@
 package test;
 
+import com.sun.xml.internal.ws.api.pipe.Engine;
+import engine.EngineConfig;
 import engine.GameEngine;
+import engine.ScreenMode;
 import engine.callbacks.EngineCallback;
 import engine.graphics.Shader;
 import engine.graphics.gl.VertexArrayObject;
 
 public class Main implements EngineCallback {
 
-	//JUST  FOR TESTING PURPOSE; MAY BE MOVED IN SEPERATE FILE FOR HUMAN EYES
-	private static final String TITLE = "Engine";
-	private static final int WIDTH = 600;
-	private static final int HEIGHT = 600;
+	private float state;
+	private boolean up;
 
 	float[] vertices = new float[]{
 			-0.5F, -0.5F, 1.0F,
@@ -28,7 +29,14 @@ public class Main implements EngineCallback {
 	private VertexArrayObject vao;
 
 	public Main(){
-		GameEngine gameEngine = new GameEngine(this, TITLE, WIDTH, HEIGHT);
+		EngineConfig config = new EngineConfig();
+		config.title = "GameEngine";
+		config.width = 700;
+		config.height = 500;
+		config.rezisable = false;
+		config.vsync = false;
+		config.screenMode = ScreenMode.WINDOWED;
+		GameEngine gameEngine = new GameEngine(this, config);
 		gameEngine.start();
 	}
 
@@ -40,12 +48,23 @@ public class Main implements EngineCallback {
 
 	@Override
 	public void tick(float dt) {
+		if(up){
+			state += 0.02F;
+		}else{
+			state -= 0.02F;
+		}
+		if(state > 1){
+			up = false;
+		}else if(state < 0){
+			up = true;
+		}
 	}
 
 	@Override
 	public void render() {
 		shader.bind();
-		shader.setUniform4f("u_Color", 1.0f, 0.0f, 0.0f, 0.0f);
+		shader.setUniform1f("state", state);
+		shader.setUniform4f("u_Color", 1.0f, 0.0f, 1.0f, 0.0f);
 		vao.bind();
 		vao.draw();
 		vao.unbind();

@@ -68,4 +68,8 @@ public class Mathf {
     public static float normalize(float value, float min, float max){
         return (value - min) / (max - min);
     }
+
+    public static float toRadians(float by) {
+        return (float) Math.toRadians(by);
+    }
 }

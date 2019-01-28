@@ -1,13 +1,20 @@
 #shader vertex
 #version 330 core
 
-void main() {
+in vec4 position;
 
+void main() {
+    gl_Position = position;
 }
 
 #shader fragment
 #version 330 core
 
-void main() {
+uniform vec4 u_Color;
+uniform float state;
 
+out vec4 color;
+
+void main() {
+    color = u_Color * state;
 }

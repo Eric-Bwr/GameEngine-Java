@@ -17,11 +17,9 @@ public class GameEngine implements Runnable{
 	private Window window;
 	private boolean running;
 
-	private boolean resizable;
-
-	public GameEngine(EngineCallback callback, String title, int width, int height){
+	public GameEngine(EngineCallback callback, EngineConfig config){
 		this.engineCallback = callback;
-		window = new Window(title, width, height);
+		window = new Window(config);
 	}
 
 	public void start(){

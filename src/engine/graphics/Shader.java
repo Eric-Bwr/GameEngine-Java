@@ -112,9 +112,7 @@ public class Shader {
 		glUniform2i(getUniform(name), vector.x(), vector.y());
 	}
 
-	public void setUniform3i(String name, Vec3i vector){
-		glUniform3i(getUniform(name), vector.x(), vector.y(), vector.z());
-	}
+	public void setUniform3i(String name, Vec3i vector){ glUniform3i(getUniform(name), vector.x(), vector.y(), vector.z()); }
 
 	public void setUniform1f(String name, float value){
 		glUniform1f(getUniform(name), value);
@@ -124,11 +122,7 @@ public class Shader {
 		glUniform2f(getUniform(name), vector.x(), vector.y());
 	}
 
-	public void setUniform3i(String name, Vec3f vector){
-		glUniform3f(getUniform(name), vector.x(), vector.y(), vector.z());
-	}
+	public void setUniform3i(String name, Vec3f vector){ glUniform3f(getUniform(name), vector.x(), vector.y(), vector.z()); }
 
-	public void setUniform4f(String name, float x, float y, float z, float w){
-		glUniform4f(getUniform(name), x, y, z, w);
-	}
+	public void setUniform4f(String name, float x, float y, float z, float w){ glUniform4f(getUniform(name), x, y, z, w); }
 }
