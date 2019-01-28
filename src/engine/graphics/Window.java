@@ -45,7 +45,6 @@ public class Window {
 		GL.createCapabilities();
 		Log.logInfo(glGetString(GL_VERSION));
 		Shader shader = new Shader("res/Shaders/Basic.glsl");
-
 	}
 
 	private void initCallbacks(){

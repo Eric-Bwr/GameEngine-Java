@@ -65,7 +65,6 @@ public class Shader {
 		if(status == GL11.GL_FALSE){
 			Log.logError("Failed to compile Shader of type " + shaderType);
 		}
-		Log.logInfo("sssssss");
 		return shader;
 	}
 }
