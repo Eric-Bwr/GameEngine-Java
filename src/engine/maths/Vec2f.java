@@ -2,6 +2,9 @@ package engine.maths;
 
 public class Vec2f {
 
+    public static final Vec2f I = new Vec2f(1, 0);
+    public static final Vec2f J = new Vec2f(0, 1);
+
     private float x;
     private float y;
 
@@ -20,6 +23,10 @@ public class Vec2f {
         this.x -= vec2.x();
         this.y -= vec2.y();
         return this;
+    }
+
+    public float mult(Vec2f vec2){
+        return this.x * vec2.x + this.y * vec2.y;
     }
 
     public Vec2f add(float x, float y){

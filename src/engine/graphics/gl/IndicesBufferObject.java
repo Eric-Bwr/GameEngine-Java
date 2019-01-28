@@ -18,9 +18,9 @@ public class IndicesBufferObject {
         this.buffer.put(data).flip();
 
         id = glGenBuffers();
-        bind();
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
-        unbind();
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
     public void bind(){
@@ -35,5 +35,4 @@ public class IndicesBufferObject {
         unbind();
         glDeleteBuffers(id);
     }
-
 }

@@ -2,7 +2,6 @@ package engine.graphics.gl;
 
 import static org.lwjgl.opengl.GL30.*;
 
-//TODO: Test with shader
 public class VertexArrayObject {
 
     private int id;
@@ -12,10 +11,10 @@ public class VertexArrayObject {
 
     public VertexArrayObject(float[] vpos, int[] indices){
         this.id = glGenVertexArrays();
-        bind();
+        glBindVertexArray(id);
         this.indices = new IndicesBufferObject(indices);
         this.position = new VertexBufferObject(0, vpos, 3);
-        unbind();
+        glBindVertexArray(0);
         this.vertexCount = indices.length;
     }
 

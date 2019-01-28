@@ -29,8 +29,7 @@ public class Window {
 			glfwTerminate();
 		}
 		glfwDefaultWindowHints();
-		glfwWindowHint(GLFW_VERSION_MINOR, 2);
-		glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE);
+		glfwWindowHint(GLFW_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_VERSION_MAJOR, 3);
 		window = glfwCreateWindow(width, height, title, NULL, NULL);
 		if(window == NULL){
@@ -41,10 +40,11 @@ public class Window {
 		glfwSetWindowPos(window, (vidmode.width() - width) / 2, (vidmode.height() - height) / 2);
 		glfwMakeContextCurrent(window);
 		glfwShowWindow(window);
+		glfw
+		glfwSwapInterval(0);
 		initCallbacks();
 		GL.createCapabilities();
 		Log.logInfo(glGetString(GL_VERSION));
-		Shader shader = new Shader("res/Shaders/Basic.glsl");
 	}
 
 	private void initCallbacks(){
@@ -54,9 +54,7 @@ public class Window {
 		});
 	}
 
-	public void update(){
-		glfwPollEvents();
-	}
+	public void swapBuffers(){ glfwSwapBuffers(window); }
 
 	public boolean shouldClose(){
 		return glfwWindowShouldClose(window);

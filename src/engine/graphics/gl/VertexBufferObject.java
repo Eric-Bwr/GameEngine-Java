@@ -20,10 +20,10 @@ public class VertexBufferObject {
         this.attribNumber = attribNumber;
 
         id = glGenBuffers();
-        bind();
+        glBindBuffer(GL_ARRAY_BUFFER, id);
         glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
         glVertexAttribPointer(attribNumber, coordSize, GL_FLOAT, false, 0, 0);
-        unbind();
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     public void bind(){
