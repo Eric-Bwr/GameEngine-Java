@@ -40,12 +40,13 @@ public class Window {
 		} else if(config.screenMode.equals(ScreenMode.WINDOWED)) {
 			glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 			GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-			window = glfwCreateWindow(vidMode.width(),vidMode.height(), config.title, NULL, NULL);
-			glfwSetWindowPos(window, 100, 0);
-		} else if(config.screenMode.equals(ScreenMode.WINDOW))
+			window = glfwCreateWindow(vidMode.width(), vidMode.height(), config.title, NULL, NULL);
+			glfwSetWindowPos(window, 0, 0);
+		} else if(config.screenMode.equals(ScreenMode.WINDOW)) {
 			window = glfwCreateWindow(config.width, config.height, config.title, NULL, NULL);
 			GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 			glfwSetWindowPos(window, (vidMode.width() - config.width) / 2, (vidMode.height() - config.height) / 2);
+		}
 		if(window == NULL){
 			Log.logError("Failed to create Window!");
 			glfwTerminate();

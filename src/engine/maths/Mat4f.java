@@ -1,6 +1,7 @@
 package engine.maths;
 
-import com.sun.javafx.geom.Matrix3f;
+import engine.maths.Mathf;
+import engine.maths.Vec3f;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
