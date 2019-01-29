@@ -1,6 +1,7 @@
 package engine;
 
 import engine.callbacks.EngineCallback;
+import engine.callbacks.KeyCallback;
 import engine.graphics.Window;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
@@ -12,14 +13,14 @@ public class GameEngine implements Runnable{
 
 	private static final int TICKS_PER_SECOND = 60;
 
-	private EngineCallback engineCallback;
+	public EngineCallback engineCallback;
 
 	private Window window;
 	private boolean running;
 
 	public GameEngine(EngineCallback callback, EngineConfig config){
 		this.engineCallback = callback;
-		window = new Window(config);
+		window = new Window(callback, config);
 	}
 
 	public void start(){
@@ -82,5 +83,9 @@ public class GameEngine implements Runnable{
 		}
 		engineCallback.terminate();
 		window.terminate();
+	}
+
+	public void applyKeyCallback(KeyCallback kc){
+		window.applyKeyCall(kc);
 	}
 }

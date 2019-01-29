@@ -1,7 +1,5 @@
 package engine.maths;
 
-import engine.maths.Mathf;
-import engine.maths.Vec3f;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -15,11 +13,9 @@ public class Mat4f {
             m30, m31, m32, m33
             ;
 
-    public Mat4f(){
+    public Mat4f(){ }
 
-    }
-
-    public static Mat4f identity(){
+    public Mat4f identity(){
         Mat4f out = new Mat4f();
         out.m00 = 1.0F;
         out.m11 = 1.0F;
@@ -28,7 +24,7 @@ public class Mat4f {
         return out;
     }
 
-    public static Mat4f orthographic(float left, float right, float bottom, float top, float near, float far){
+    public Mat4f orthographic(float left, float right, float bottom, float top, float near, float far){
         Mat4f out = identity();
         out.m00 = 2.0F / (right - left);
         out.m11 = 2.0F / (top - bottom);
@@ -40,6 +36,19 @@ public class Mat4f {
         return out;
     }
 
+    public Mat4f projection(float left, float right, float bottom, float top, float near, float far){
+        Mat4f out = identity();
+        out.m00 = 2 * near / (right - left);
+        out.m11 = 2 * near / (top - bottom);
+        out.m22 = - (far +near) / (far - near);
+        out.m23 = - 1;
+        out.m32 = - 2 * far * near / (far - near);
+        out.m20 = (right + left) / (right - left);
+        out.m21 = (top + bottom) / (top - bottom);
+        out.m33 = 0;
+        return out;
+    }
+
     public Mat4f translate(Vec3f vec){
         Mat4f out = identity();
         out.m03 = vec.x();
@@ -48,11 +57,10 @@ public class Mat4f {
         return out;
     }
 
-    public static Mat4f rotate(float by){
+    public Mat4f rotate(float by){
         Mat4f out = identity();
-        float r = Mathf.toRadians(by);
-        float cos = Mathf.cos(r);
-        float sin = Mathf.sin(r);
+        float cos = Mathf.cos(by);
+        float sin = Mathf.sin(by);
         out.m00 = cos;
         out.m10 = sin;
         out.m01 = cos;

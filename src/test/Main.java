@@ -1,18 +1,14 @@
 package test;
 
-import com.sun.xml.internal.ws.api.pipe.Engine;
 import engine.EngineConfig;
 import engine.GameEngine;
 import engine.ScreenMode;
 import engine.callbacks.EngineCallback;
+import engine.callbacks.KeyCallback;
 import engine.graphics.Model;
 import engine.graphics.Shader;
 import engine.graphics.Texture;
-import engine.graphics.gl.VertexArrayObject;
-import org.lwjgl.stb.STBImage;
-
-import java.io.File;
-import java.io.FileInputStream;
+import org.lwjgl.glfw.GLFW;
 
 public class Main implements EngineCallback {
 
@@ -38,6 +34,9 @@ public class Main implements EngineCallback {
 	private Shader shader;
 	private Model model;
 
+	private KeyCallback kc;
+	private GameEngine gameEngine;
+
 	public Main(){
 		EngineConfig config = new EngineConfig();
 		config.title = "GameEngine";
@@ -46,8 +45,15 @@ public class Main implements EngineCallback {
 		config.rezisable = false;
 		config.vsync = false;
 		config.screenMode = ScreenMode.WINDOW;
-		GameEngine gameEngine = new GameEngine(this, config);
+
+		gameEngine = new GameEngine(this, config);
 		gameEngine.start();
+	}
+
+	@Override
+	public void initCallbacks() {
+		kc = new KeyCallback();
+		gameEngine.applyKeyCallback(kc);
 	}
 
 	@Override
@@ -59,7 +65,7 @@ public class Main implements EngineCallback {
 
 	@Override
 	public void tick(float dt) {
-
+		System.out.println(kc.isKeyCode(GLFW.GLFW_KEY_SPACE));
 	}
 
 	@Override

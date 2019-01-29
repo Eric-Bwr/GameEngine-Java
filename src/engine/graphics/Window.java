@@ -2,6 +2,8 @@ package engine.graphics;
 
 import engine.EngineConfig;
 import engine.ScreenMode;
+import engine.callbacks.EngineCallback;
+import engine.callbacks.KeyCallback;
 import engine.util.Log;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -12,19 +14,16 @@ import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-//TODO: FIX WEIRD VSYNC BUG!
 public class Window {
 
 	private long window;
 
 	private EngineConfig config;
+	private EngineCallback callback;
 
-	private double mouseX;
-	private double mouseY;
-	private boolean[] keys = new boolean[512];
-	
-	public Window(EngineConfig config){
+	public Window(EngineCallback callback, EngineConfig config){
 		this.config = config;
+		this.callback = callback;
 	}
 	
 	public void initWindow(){
@@ -54,7 +53,7 @@ public class Window {
 		}
 		glfwMakeContextCurrent(window);
 		glfwShowWindow(window);
-		initCallbacks();
+		callback.initCallbacks();
 		GL.createCapabilities();
 		if(config.vsync)
 			glfwSwapInterval(1);
@@ -72,16 +71,6 @@ public class Window {
 			glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	}
 
-	private void initCallbacks(){
-		glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-			keys[key] = action != GLFW_RELEASE;
-		});
-		glfwSetCursorPosCallback(window, (window, mx, my) -> {
-			this.mouseX = mx;
-			this.mouseY = my;
-		});
-	}
-
 	public void swapBuffers(){ glfwSwapBuffers(window); }
 
 	public boolean shouldClose(){
@@ -94,17 +83,7 @@ public class Window {
 		glfwTerminate();
 	}
 
-	//TODO: Move in nother file
-
-	public double getMouseX() {
-		return mouseX;
-	}
-
-	public double getMouseY() {
-		return mouseY;
-	}
-	
-	public boolean isKeyDown(int keyCode){
-		return keys[keyCode];
+	public void applyKeyCall(KeyCallback kc){
+		glfwSetKeyCallback(window, kc);
 	}
 }

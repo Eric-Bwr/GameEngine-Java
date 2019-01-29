@@ -2,6 +2,8 @@ package engine.callbacks;
 
 public interface EngineCallback {
 
+    void initCallbacks();
+
     /**
      * Everything you have to load related to opengl has to get loaded here
      */
@@ -12,5 +14,4 @@ public interface EngineCallback {
     void render();
 
     void terminate();
-
 }
