@@ -5,9 +5,12 @@ import engine.GameEngine;
 import engine.ScreenMode;
 import engine.callbacks.EngineCallback;
 import engine.callbacks.KeyCallback;
+import engine.callbacks.MouseCallback;
 import engine.graphics.Model;
 import engine.graphics.Shader;
 import engine.graphics.Texture;
+import engine.maths.Mapper;
+import engine.maths.Vec2f;
 import org.lwjgl.glfw.GLFW;
 
 public class Main implements EngineCallback {
@@ -35,6 +38,7 @@ public class Main implements EngineCallback {
 	private Model model;
 
 	private KeyCallback kc;
+	private MouseCallback mc;
 	private GameEngine gameEngine;
 
 	public Main(){
@@ -42,6 +46,7 @@ public class Main implements EngineCallback {
 		config.title = "GameEngine";
 		config.width = 700;
 		config.height = 500;
+		config.windowIconPath = "";
 		config.rezisable = false;
 		config.vsync = false;
 		config.screenMode = ScreenMode.WINDOW;
@@ -53,7 +58,10 @@ public class Main implements EngineCallback {
 	@Override
 	public void initCallbacks() {
 		kc = new KeyCallback();
-		gameEngine.applyKeyCallback(kc);
+		gameEngine.applyCallback(kc);
+
+		mc = new MouseCallback();
+		gameEngine.applyCallback(mc);
 	}
 
 	@Override
@@ -65,13 +73,17 @@ public class Main implements EngineCallback {
 
 	@Override
 	public void tick(float dt) {
-		System.out.println(kc.isKeyCode(GLFW.GLFW_KEY_SPACE));
+
 	}
 
 	@Override
 	public void render() {
+		float mx = Mapper.map((float)mc.getMouseX(), 0, 700, -1, 1);
+		float my = Mapper.map((float)mc.getMouseY(), 0, 500, 1, -1);
+
 		model.bind();
 		shader.bind();
+		shader.setUniform2f("mousePos", new Vec2f(mx, my));
 		model.draw();
 		shader.unbind();
 		model.unbind();

@@ -2,6 +2,7 @@ package engine;
 
 import engine.callbacks.EngineCallback;
 import engine.callbacks.KeyCallback;
+import engine.callbacks.MouseCallback;
 import engine.graphics.Window;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
@@ -85,7 +86,11 @@ public class GameEngine implements Runnable{
 		window.terminate();
 	}
 
-	public void applyKeyCallback(KeyCallback kc){
-		window.applyKeyCall(kc);
+	public void applyCallback(KeyCallback kc){
+		window.applyKeyCallback(kc);
+	}
+
+	public void applyCallback(MouseCallback kc){
+		window.applyMouseCallback(kc);
 	}
 }

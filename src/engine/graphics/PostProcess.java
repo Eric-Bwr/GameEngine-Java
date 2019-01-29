@@ -44,6 +44,10 @@ public class PostProcess {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
+    public void render(){
+
+    }
+
     public void cleanUp(){
         shader.cleanUpMemory();
         glBindFramebuffer(GL_FRAMEBUFFER, 0);

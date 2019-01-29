@@ -40,7 +40,6 @@ public class Texture {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public void bind() {
