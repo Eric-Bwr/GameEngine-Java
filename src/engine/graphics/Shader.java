@@ -29,7 +29,8 @@ public class Shader {
 		StringBuilder vertexBuffer = new StringBuilder();
 		StringBuilder fragmentBuffer = new StringBuilder();
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(Class.class.getResourceAsStream(path)));
+			BufferedReader reader =
+				new BufferedReader(new InputStreamReader(Class.class.getResourceAsStream("/" + path)));
 			String buff;
 			while ((buff = reader.readLine()) != null) {
 				if (buff.toLowerCase().contains("vertex")){

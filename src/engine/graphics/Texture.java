@@ -13,7 +13,7 @@ public class Texture {
 
     public Texture(String path) {
         try {
-            BufferedImage image = ImageIO.read(Class.class.getResourceAsStream(path));
+            BufferedImage image = ImageIO.read(Class.class.getResourceAsStream("/" + path));
             int[] pixels = new int[image.getWidth() * image.getHeight()];
             image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
             ByteBuffer buffer = ByteBuffer.allocateDirect(image.getWidth() * image.getHeight() * 4);

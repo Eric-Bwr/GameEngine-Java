@@ -46,7 +46,7 @@ public class Main implements EngineCallback {
 		config.title = "GameEngine";
 		config.width = 700;
 		config.height = 500;
-		config.windowIconPath = "";
+		config.windowIconPath = "res/dog.png";
 		config.rezisable = false;
 		config.vsync = false;
 		config.screenMode = ScreenMode.WINDOW;
@@ -66,8 +66,8 @@ public class Main implements EngineCallback {
 
 	@Override
 	public void init() {
-		shader = new Shader("/Shaders/Basic.glsl");
-		Texture tex = new Texture("/dog.png");
+		shader = new Shader("Shaders/Basic.glsl");
+		Texture tex = new Texture("dog.png");
 		model = new Model(tex, vertices, textureCoords, indices);
 	}
 
