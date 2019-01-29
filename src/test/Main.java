@@ -5,28 +5,38 @@ import engine.EngineConfig;
 import engine.GameEngine;
 import engine.ScreenMode;
 import engine.callbacks.EngineCallback;
+import engine.graphics.Model;
 import engine.graphics.Shader;
+import engine.graphics.Texture;
 import engine.graphics.gl.VertexArrayObject;
+import org.lwjgl.stb.STBImage;
+
+import java.io.File;
+import java.io.FileInputStream;
 
 public class Main implements EngineCallback {
 
-	private float state;
-	private boolean up;
-
-	float[] vertices = new float[]{
-			-0.5F, -0.5F, 1.0F,
+	private float[] vertices = new float[]{
 			-0.5F, 0.5F, 1.0F,
+			-0.5F, -0.5F, 1.0F,
 			0.5F, -0.5F, 1.0F,
 			0.5F, 0.5F, 1.0F
 	};
 
+	private float[] textureCoords = {
+			0, 0,
+			0, 1,
+			1, 1,
+			1, 0
+	};
+
 	private int[] indices = {
-			0, 1, 2,
-			1, 2, 3
+			0, 1, 3,
+			3, 1, 2
 	};
 
 	private Shader shader;
-	private VertexArrayObject vao;
+	private Model model;
 
 	public Main(){
 		EngineConfig config = new EngineConfig();
@@ -35,7 +45,7 @@ public class Main implements EngineCallback {
 		config.height = 500;
 		config.rezisable = false;
 		config.vsync = false;
-		config.screenMode = ScreenMode.WINDOWED;
+		config.screenMode = ScreenMode.WINDOW;
 		GameEngine gameEngine = new GameEngine(this, config);
 		gameEngine.start();
 	}
@@ -43,38 +53,28 @@ public class Main implements EngineCallback {
 	@Override
 	public void init() {
 		shader = new Shader("res/Shaders/Basic.glsl");
-		vao = new VertexArrayObject(vertices, indices);
+		Texture tex = new Texture(new File(this.getClass().getResource("textures/dog.png").getPath()).getAbsolutePath());
+		model = new Model(tex, vertices, textureCoords, indices);
 	}
 
 	@Override
 	public void tick(float dt) {
-		if(up){
-			state += 0.02F;
-		}else{
-			state -= 0.02F;
-		}
-		if(state > 1){
-			up = false;
-		}else if(state < 0){
-			up = true;
-		}
+
 	}
 
 	@Override
 	public void render() {
+		model.bind();
 		shader.bind();
-		shader.setUniform1f("state", state);
-		shader.setUniform4f("u_Color", 1.0f, 0.0f, 1.0f, 0.0f);
-		vao.bind();
-		vao.draw();
-		vao.unbind();
+		model.draw();
 		shader.unbind();
+		model.unbind();
 	}
 
 	@Override
 	public void terminate() {
 		shader.cleanUpMemory();
-		vao.cleanUpMemory();
+		model.cleanUpMemory();
 	}
 
 	public static void main(String[] args){

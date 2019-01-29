@@ -12,6 +12,7 @@ import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
+//TODO: FIX WEIRD VSYNC BUG!
 public class Window {
 
 	private long window;
@@ -42,10 +43,11 @@ public class Window {
 			GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 			window = glfwCreateWindow(vidMode.width(),vidMode.height(), config.title, NULL, NULL);
 			glfwSetWindowPos(window, 100, 0);
-		} else if(config.screenMode.equals(ScreenMode.WINDOW))
+		} else if(config.screenMode.equals(ScreenMode.WINDOW)) {
 			window = glfwCreateWindow(config.width, config.height, config.title, NULL, NULL);
 			GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 			glfwSetWindowPos(window, (vidMode.width() - config.width) / 2, (vidMode.height() - config.height) / 2);
+		}
 		if(window == NULL){
 			Log.logError("Failed to create Window!");
 			glfwTerminate();
