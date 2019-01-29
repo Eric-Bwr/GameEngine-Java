@@ -56,6 +56,10 @@ public class Window {
 		glfwShowWindow(window);
 		initCallbacks();
 		GL.createCapabilities();
+		if(config.vsync)
+			glfwSwapInterval(1);
+		else
+			glfwSwapInterval(0);
 		Log.logInfo(glGetString(GL_VERSION));
 	}
 
@@ -66,11 +70,6 @@ public class Window {
 			glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 		else
 			glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-		if(config.vsync)
-			glfwSwapInterval(1);
-		else
-			glfwSwapInterval(0);
-
 	}
 
 	private void initCallbacks(){
