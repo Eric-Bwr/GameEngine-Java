@@ -1,26 +1,32 @@
 package engine.graphics;
 
-import de.matthiasmann.twl.utils.PNGDecoder;
-
-import java.io.*;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
-import static org.lwjgl.stb.STBImage.*;
 
 public class Texture {
 
     private int id;
 
     public Texture(String path) {
-        PNGDecoder decoder = null;
         try {
-            FileInputStream fis = new FileInputStream(path);
-            decoder = new PNGDecoder(fis);
-            ByteBuffer buf = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
-            decoder.decode(buf, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
-            buf.flip();
+            BufferedImage image = ImageIO.read(Class.class.getResourceAsStream(path));
+            int[] pixels = new int[image.getWidth() * image.getHeight()];
+            image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
+            ByteBuffer buffer = ByteBuffer.allocateDirect(image.getWidth() * image.getHeight() * 4);
+            for(int y = 0; y < image.getHeight(); y++){
+                for(int x = 0; x < image.getWidth(); x++){
+                    int pixel = pixels[y * image.getWidth() + x];
+                    buffer.put((byte) ((pixel >> 16) & 0xFF));
+                    buffer.put((byte) ((pixel >> 8) & 0xFF));
+                    buffer.put((byte) (pixel & 0xFF));
+                    buffer.put((byte) ((pixel >> 24) & 0xFF));
+                }
+            }
+            buffer.flip();
 
             id = glGenTextures();
             glBindTexture(GL_TEXTURE_2D, id);
@@ -29,7 +35,7 @@ public class Texture {
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buf);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
             glGenerateMipmap(GL_TEXTURE_2D);
         } catch (Exception e) {
             e.printStackTrace();

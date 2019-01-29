@@ -17,7 +17,6 @@ public class PostProcess {
         id = glGenFramebuffers();
         glBindFramebuffer(GL_FRAMEBUFFER, id);
 
-
         textureID = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, textureID);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
@@ -50,5 +49,4 @@ public class PostProcess {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glDeleteFramebuffers(id);
     }
-
 }

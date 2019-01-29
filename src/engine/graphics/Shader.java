@@ -11,6 +11,7 @@ import static org.lwjgl.opengl.GL20.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.TreeMap;
 
 public class Shader {
@@ -28,7 +29,7 @@ public class Shader {
 		StringBuilder vertexBuffer = new StringBuilder();
 		StringBuilder fragmentBuffer = new StringBuilder();
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(path));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(Class.class.getResourceAsStream(path)));
 			String buff;
 			while ((buff = reader.readLine()) != null) {
 				if (buff.toLowerCase().contains("vertex")){

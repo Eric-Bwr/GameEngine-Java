@@ -52,8 +52,8 @@ public class Main implements EngineCallback {
 
 	@Override
 	public void init() {
-		shader = new Shader("res/Shaders/Basic.glsl");
-		Texture tex = new Texture(new File(this.getClass().getResource("textures/dog.png").getPath()).getAbsolutePath());
+		shader = new Shader("/Shaders/Basic.glsl");
+		Texture tex = new Texture("/dog.png");
 		model = new Model(tex, vertices, textureCoords, indices);
 	}
 
