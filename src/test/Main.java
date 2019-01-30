@@ -11,7 +11,6 @@ import engine.graphics.Shader;
 import engine.graphics.Texture;
 import engine.maths.Mapper;
 import engine.maths.Vec2f;
-import org.lwjgl.glfw.GLFW;
 
 public class Main implements EngineCallback {
 
@@ -40,14 +39,14 @@ public class Main implements EngineCallback {
 	private KeyCallback kc;
 	private MouseCallback mc;
 	private GameEngine gameEngine;
+	private EngineConfig config = new EngineConfig();
 
 	public Main(){
-		EngineConfig config = new EngineConfig();
 		config.title = "GameEngine";
 		config.width = 700;
 		config.height = 500;
 		config.windowIconPath = "res/dog.png";
-		config.rezisable = false;
+		config.rezisable = true;
 		config.vsync = false;
 		config.screenMode = ScreenMode.WINDOW;
 
@@ -78,8 +77,8 @@ public class Main implements EngineCallback {
 
 	@Override
 	public void render() {
-		float mx = Mapper.map((float)mc.getMouseX(), 0, 700, -1, 1);
-		float my = Mapper.map((float)mc.getMouseY(), 0, 500, 1, -1);
+		float mx = Mapper.map((float)mc.getMouseX(), 0, config.width, -1, 1);
+		float my = Mapper.map((float)mc.getMouseY(), 0, config.height, 1, -1);
 
 		model.bind();
 		shader.bind();

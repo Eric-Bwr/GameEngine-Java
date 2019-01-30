@@ -2,7 +2,6 @@ package engine.graphics;
 
 import engine.graphics.gl.VertexArrayObject;
 
-import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
 
 public class Model  {
@@ -33,5 +32,4 @@ public class Model  {
         vao.cleanUpMemory();
         texture.cleanUpMemory();
     }
-
 }

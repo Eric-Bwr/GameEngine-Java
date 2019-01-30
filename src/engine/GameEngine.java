@@ -10,7 +10,7 @@ import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 
-public class GameEngine implements Runnable{
+public class GameEngine implements Runnable {
 
 	private static final int TICKS_PER_SECOND = 60;
 
@@ -90,7 +90,7 @@ public class GameEngine implements Runnable{
 		window.applyKeyCallback(kc);
 	}
 
-	public void applyCallback(MouseCallback kc){
-		window.applyMouseCallback(kc);
+	public void applyCallback(MouseCallback mc){
+		window.applyMouseCallback(mc);
 	}
 }

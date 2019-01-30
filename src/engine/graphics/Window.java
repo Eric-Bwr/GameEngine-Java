@@ -61,6 +61,7 @@ public class Window {
 		glfwShowWindow(window);
 		callback.initCallbacks();
 		GL.createCapabilities();
+		initCallbacks();
 		setIcon();
 		if(config.vsync)
 			glfwSwapInterval(1);
@@ -71,7 +72,6 @@ public class Window {
 
 	public void setIcon() {
 		if(!(config.windowIconPath.equals(""))) {
-			Log.logInfo("SETTING ICON");
 			String path = config.windowIconPath;
 			IntBuffer w = memAllocInt(1);
 			IntBuffer h = memAllocInt(1);
@@ -110,6 +110,17 @@ public class Window {
 			glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	}
 
+	private void initCallbacks(){
+		glfwSetWindowSizeCallback(window, new GLFWWindowSizeCallback() {
+			@Override
+			public void invoke(long window, int width, int height) {
+				config.width = width;
+				config.height = height;
+				glViewport(0, 0, width, height);
+			}
+		});
+	}
+
 	public void swapBuffers(){ glfwSwapBuffers(window); }
 
 	public boolean shouldClose(){
@@ -126,7 +137,7 @@ public class Window {
 		glfwSetKeyCallback(window, kc);
 	}
 
-	public void applyMouseCallback(MouseCallback kc) {
-		glfwSetCursorPosCallback(window, kc);
+	public void applyMouseCallback(MouseCallback mc) {
+		glfwSetCursorPosCallback(window, mc);
 	}
 }
