@@ -49,7 +49,7 @@ public class Vec3i {
     public Vec3i mult(int f){
         this.x *= f;
         this.y *= f;
-        this.z *= z;
+        this.z *= f;
         return this;
     }
 
@@ -80,7 +80,7 @@ public class Vec3i {
     }
 
     public int z(){
-        return y;
+        return z;
     }
 
     public int y(int y){

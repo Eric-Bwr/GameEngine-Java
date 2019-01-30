@@ -9,49 +9,44 @@ import engine.callbacks.MouseCallback;
 import engine.graphics.Model;
 import engine.graphics.Shader;
 import engine.graphics.Texture;
-import engine.maths.Mapper;
-import engine.maths.Vec2f;
+import engine.maths.Mat4f;
+import engine.maths.Vec3f;
+import engine.model.Camera3D;
+import engine.model.ModelLoader;
+import engine.model.entity.Entity;
+import org.lwjgl.glfw.GLFW;
 
 public class Main implements EngineCallback {
 
-	private float[] vertices = new float[]{
-			-0.5F, 0.5F, 1.0F,
-			-0.5F, -0.5F, 1.0F,
-			0.5F, -0.5F, 1.0F,
-			0.5F, 0.5F, 1.0F
-	};
-
-	private float[] textureCoords = {
-			0, 0,
-			0, 1,
-			1, 1,
-			1, 0
-	};
-
-	private int[] indices = {
-			0, 1, 3,
-			3, 1, 2
-	};
+	private static final float FOV = 70;
+	private static final float NEAR = 0.1f;
+	private static final float FAR = 1000;
+	private static final float SENSITIVITY = 0.1F;
+	private float moveSpeed = 0.1F;
 
 	private Shader shader;
+	private Entity entity;
 	private Model model;
+	private ModelLoader modelLoader = new ModelLoader();
 
 	private KeyCallback kc;
-	private MouseCallback mc;
+	private MouseCallback mouse;
 	private GameEngine gameEngine;
 	private EngineConfig config = new EngineConfig();
+	private Camera3D camera = new Camera3D(new Vec3f(0, 0, 0), 0, 0, 0);
 
 	public Main(){
 		config.title = "GameEngine";
-		config.width = 700;
-		config.height = 500;
+		config.width = 800;
+		config.height = 450;
 		config.windowIconPath = "dog.png";
 		config.rezisable = true;
 		config.vsync = false;
-		config.screenMode = ScreenMode.WINDOW;
+		config.screenMode = ScreenMode.WINDOWED;
 
-		gameEngine = new GameEngine(this, config);
+		gameEngine = new GameEngine(this, config, camera);
 		gameEngine.start();
+
 	}
 
 	@Override
@@ -59,30 +54,58 @@ public class Main implements EngineCallback {
 		kc = new KeyCallback();
 		gameEngine.applyCallback(kc);
 
-		mc = new MouseCallback();
-		gameEngine.applyCallback(mc);
+		mouse = new MouseCallback();
+		gameEngine.applyCallback(mouse);
 	}
 
 	@Override
 	public void init() {
 		shader = new Shader("Shaders/Basic.glsl");
-		Texture tex = new Texture("dog.png");
-		model = new Model(tex, vertices, textureCoords, indices);
+		Texture tex = new Texture("Textures/stallTexture.png");
+		model = modelLoader.loadModel("Objects/stall.obj", tex);
+		entity = new Entity(model, new Vec3f(0, 0, -25), 0, 0, 0, 1);
 	}
 
 	@Override
 	public void tick(float dt) {
-
+		if (kc.isKeyCode(GLFW.GLFW_KEY_ESCAPE)) {
+			gameEngine.stop();
+		}
+		if(kc.isKeyCode(GLFW.GLFW_KEY_W)){
+			camera.move(new Vec3f(0.0F, 0.0F, moveSpeed));
+		}
+		if(kc.isKeyCode(GLFW.GLFW_KEY_S)){
+			camera.move(new Vec3f(0.0F, 0.0F, -moveSpeed));
+		}
+		if(kc.isKeyCode(GLFW.GLFW_KEY_A)){
+			camera.move(new Vec3f(moveSpeed, 0.0F, 0.0F));
+		}
+		if(kc.isKeyCode(GLFW.GLFW_KEY_D)){
+			camera.move(new Vec3f(-moveSpeed, 0.0F, 0.0F));
+		}
+		if(kc.isKeyCode(GLFW.GLFW_KEY_SPACE)){
+			camera.move(new Vec3f(0.0F, -moveSpeed, 0.0F));
+		}
+		if(kc.isKeyCode(GLFW.GLFW_KEY_LEFT_SHIFT)){
+			camera.move(new Vec3f(0.0F, moveSpeed, 0.0F));
+		}
 	}
+
+	//TODO: Cleanup
 
 	@Override
 	public void render() {
-		model.bind();
+		camera.setRotY(camera.getRotY() - mouse.getDeltaX() * SENSITIVITY);
+		camera.setRotX(camera.getRotX() - mouse.getDeltaY() * SENSITIVITY);
+		mouse.reset();
+		entity.bind();
 		shader.bind();
-		shader.setUniform2f("mousePos", new Vec2f(mc.getMappedX(), mc.getMappedY()));
-		model.draw();
+		shader.setUniformMat4f("projectionMatrix", Mat4f.projection(FOV, 4, 4, NEAR, FAR, null));
+		shader.setUniformMat4f("viewMatrix", camera.getViewMatrix());
+		//shader.setUniformMat4f("transformationMatrix", entity.getTransformationMatrix());
+		entity.draw();
 		shader.unbind();
-		model.unbind();
+		entity.unbind();
 	}
 
 	@Override

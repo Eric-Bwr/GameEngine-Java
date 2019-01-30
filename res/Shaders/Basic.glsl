@@ -3,14 +3,18 @@
 
 layout (location = 0) in vec4 position;
 layout (location = 1) in vec2 textCoord;
+layout (location = 2) in vec3 normals;
 
 out vec2 outTextCoord;
-out vec3 outPos;
+
+uniform mat4 transformationMatrix = mat4(1.0);
+uniform mat4 projectionMatrix;
+uniform mat4 viewMatrix;
 
 void main() {
-    gl_Position = position;
+    vec4 pos = transformationMatrix * position;
+    gl_Position = projectionMatrix * viewMatrix * pos;
     outTextCoord = textCoord;
-    outPos = position.xyz;
 }
 
 #shader fragment
@@ -19,14 +23,10 @@ void main() {
 out vec4 color;
 
 in vec2 outTextCoord;
-in vec3 outPos;
 
-uniform vec2 mousePos;
 uniform sampler2D texSampler;
 
 void main() {
-    float dis = length(mousePos.xy - outPos.xy);
-    float b = 0.1 / dis * 2;
     vec4 texColor = texture(texSampler, outTextCoord);
-    color = texColor * b;
+    color = texColor;
 }

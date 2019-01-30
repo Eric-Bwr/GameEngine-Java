@@ -5,23 +5,19 @@ import engine.ScreenMode;
 import engine.callbacks.EngineCallback;
 import engine.callbacks.KeyCallback;
 import engine.callbacks.MouseCallback;
+import engine.model.Camera2D;
+import engine.model.Camera3D;
 import engine.util.Log;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
-import sun.nio.ch.IOUtil;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import static engine.util.BufferUtil.ioResourceToByteBuffer;
-import static org.lwjgl.BufferUtils.createByteBuffer;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.stb.STBImage.stbi_image_free;
 import static org.lwjgl.stb.STBImage.stbi_load_from_memory;
@@ -31,16 +27,25 @@ public class Window {
 
 	private ArrayList<MouseCallback> mouseCallbacks = new ArrayList<>();
 
-	private long window;
+	public long window;
 
 	private EngineConfig config;
 	private EngineCallback callback;
+	private Camera2D camera2D;
+	private Camera3D camera3D;
 
-	public Window(EngineCallback callback, EngineConfig config){
+	public Window(EngineCallback callback, EngineConfig config, Camera2D camera2D){
 		this.config = config;
 		this.callback = callback;
+		this.camera2D = camera2D;
 	}
-	
+
+	public Window(EngineCallback callback, EngineConfig config, Camera3D camera3D){
+		this.config = config;
+		this.callback = callback;
+		this.camera3D = camera3D;
+	}
+
 	public void initWindow(){
 		if(!glfwInit()){
 			Log.logError("Failed to init GLFW!");
@@ -56,7 +61,7 @@ public class Window {
 			glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 			GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 			window = glfwCreateWindow(vidMode.width(),vidMode.height(), config.title, NULL, NULL);
-			glfwSetWindowPos(window, 100, 0);
+			glfwSetWindowPos(window, 0, 0);
 		} else if(config.screenMode.equals(ScreenMode.WINDOW)) {
 			window = glfwCreateWindow(config.width, config.height, config.title, NULL, NULL);
 			GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -68,11 +73,17 @@ public class Window {
 		}
 		glfwMakeContextCurrent(window);
 		glfwShowWindow(window);
+		//TODO: FIX NULLPTR
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		callback.initCallbacks();
 		for(MouseCallback mc : mouseCallbacks){
 			mc.setSize(config.width, config.height);
 		}
 		GL.createCapabilities();
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glFrontFace(GL_CW);
 		initCallbacks();
 		setIcon();
 		if(config.vsync)
@@ -87,8 +98,8 @@ public class Window {
 			ByteBuffer icon16;
 			ByteBuffer icon32;
 			try {
-				icon16 = ioResourceToByteBuffer("dog.png", 2048);
-				icon32 = ioResourceToByteBuffer("dog.png", 4096);
+				icon16 = ioResourceToByteBuffer(config.windowIconPath, 2048);
+				icon32 = ioResourceToByteBuffer(config.windowIconPath, 4096);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
@@ -127,7 +138,6 @@ public class Window {
 					mc.setSize(width, height);
 				}
 				glViewport(0, 0, width, height);
-
 			}
 		});
 	}

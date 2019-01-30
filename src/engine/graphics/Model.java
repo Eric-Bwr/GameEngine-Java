@@ -9,8 +9,8 @@ public class Model  {
     private Texture texture;
     private VertexArrayObject vao;
 
-    public Model(Texture texture, float[] vpos, float[] texCoords, int[] indices) {
-        vao = new VertexArrayObject(vpos, texCoords, indices);
+    public Model(Texture texture, float[] vpos, float[] texCoords, float[] normals, int[] indices) {
+        vao = new VertexArrayObject(vpos, texCoords, normals, indices);
         this.texture = texture;
     }
 

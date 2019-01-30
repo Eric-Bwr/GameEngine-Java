@@ -6,27 +6,27 @@ public class Mathf {
     public static final double PIS_LITTLE_BROTHER = 3.14159265D;
 
     public static float sin(float value){
-        return (float) Math.sin(Math.toDegrees(value));
+        return (float) Math.sin(Math.toRadians(value));
     }
 
     public static float cos(float value){
-        return (float) Math.cos(Math.toDegrees(value));
+        return (float) Math.cos(Math.toRadians(value));
     }
 
     public static float tan(float value){
-        return (float)Math.tan(Math.toDegrees(value));
+        return (float)Math.tan(Math.toRadians(value));
     }
 
     public static float asin(float value){
-        return (float) Math.asin(Math.toDegrees(value));
+        return (float) Math.asin(Math.toRadians(value));
     }
 
     public static float acos(float value){
-        return (float) Math.acos(Math.toDegrees(value));
+        return (float) Math.acos(Math.toRadians(value));
     }
 
     public static float atan(float value){
-        return (float)Math.atan(Math.toDegrees(value));
+        return (float)Math.atan(Math.toRadians(value));
     }
 
     public static float sqrt(float value){

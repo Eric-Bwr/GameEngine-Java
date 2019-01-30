@@ -1,9 +1,6 @@
 package engine.graphics;
 
-import engine.maths.Vec2f;
-import engine.maths.Vec2i;
-import engine.maths.Vec3f;
-import engine.maths.Vec3i;
+import engine.maths.*;
 import engine.util.Log;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -123,6 +120,8 @@ public class Shader {
 	public void setUniform2f(String name, Vec2f vector){
 		glUniform2f(getUniform(name), vector.x(), vector.y());
 	}
+
+	public void setUniformMat4f(String name, Mat4f mat){ glUniformMatrix4fv(getUniform(name), false, mat.toFloatBuffer()); }
 
 	public void setUniform3f(String name, Vec3f vector){ glUniform3f(getUniform(name), vector.x(), vector.y(), vector.z()); }
 

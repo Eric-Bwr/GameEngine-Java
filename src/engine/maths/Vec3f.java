@@ -49,7 +49,7 @@ public class Vec3f {
     public Vec3f mult(float f){
         this.x *= f;
         this.y *= f;
-        this.z *= z;
+        this.z *= f;
         return this;
     }
 
@@ -76,7 +76,7 @@ public class Vec3f {
     }
 
     public float z(){
-        return y;
+        return z;
     }
 
     public float y(float y){
@@ -84,7 +84,7 @@ public class Vec3f {
         return y;
     }
 
-    public float x(float v){
+    public float x(float x){
         this.x = x;
         return x;
     }
