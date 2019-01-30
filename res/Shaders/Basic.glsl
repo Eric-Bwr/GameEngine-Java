@@ -26,7 +26,7 @@ uniform sampler2D texSampler;
 
 void main() {
     float dis = length(mousePos.xy - outPos.xy);
-    float b = 0.2 / dis;
+    float b = 0.1 / dis * 2;
     vec4 texColor = texture(texSampler, outTextCoord);
     color = texColor * b;
 }

@@ -5,22 +5,31 @@ import engine.ScreenMode;
 import engine.callbacks.EngineCallback;
 import engine.callbacks.KeyCallback;
 import engine.callbacks.MouseCallback;
-import engine.util.BufferUtil;
 import engine.util.Log;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
-import org.lwjgl.stb.STBImage;
+import sun.nio.ch.IOUtil;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 
+import static engine.util.BufferUtil.ioResourceToByteBuffer;
+import static org.lwjgl.BufferUtils.createByteBuffer;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.stb.STBImage.stbi_image_free;
+import static org.lwjgl.stb.STBImage.stbi_load_from_memory;
 import static org.lwjgl.system.MemoryUtil.*;
 
 public class Window {
+
+	private ArrayList<MouseCallback> mouseCallbacks = new ArrayList<>();
 
 	private long window;
 
@@ -60,6 +69,9 @@ public class Window {
 		glfwMakeContextCurrent(window);
 		glfwShowWindow(window);
 		callback.initCallbacks();
+		for(MouseCallback mc : mouseCallbacks){
+			mc.setSize(config.width, config.height);
+		}
 		GL.createCapabilities();
 		initCallbacks();
 		setIcon();
@@ -72,32 +84,27 @@ public class Window {
 
 	public void setIcon() {
 		if(!(config.windowIconPath.equals(""))) {
-			String path = config.windowIconPath;
-			IntBuffer w = memAllocInt(1);
-			IntBuffer h = memAllocInt(1);
-			IntBuffer comp = memAllocInt(1);
-
 			ByteBuffer icon16;
 			ByteBuffer icon32;
 			try {
-				icon16 = BufferUtil.ioResourceToByteBuffer(path, 2048);
-				icon32 = BufferUtil.ioResourceToByteBuffer(path, 4096);
+				icon16 = ioResourceToByteBuffer("dog.png", 2048);
+				icon32 = ioResourceToByteBuffer("dog.png", 4096);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
-			try (GLFWImage.Buffer icons = GLFWImage.malloc(2)) {
-				ByteBuffer pixels16 = STBImage.stbi_load_from_memory(icon16, w, h, comp, 4);
+			IntBuffer w = memAllocInt(1);
+			IntBuffer h = memAllocInt(1);
+			IntBuffer comp = memAllocInt(1);
+			try ( GLFWImage.Buffer icons = GLFWImage.malloc(2) ) {
+				ByteBuffer pixels16 = stbi_load_from_memory(icon16, w, h, comp, 4);
 				icons.position(0).width(w.get(0)).height(h.get(0)).pixels(pixels16);
-				ByteBuffer pixels32 = STBImage.stbi_load_from_memory(icon32, w, h, comp, 4);
+				ByteBuffer pixels32 = stbi_load_from_memory(icon32, w, h, comp, 4);
 				icons.position(1).width(w.get(0)).height(h.get(0)).pixels(pixels32);
 				icons.position(0);
 				glfwSetWindowIcon(window, icons);
-				STBImage.stbi_image_free(pixels32);
-				STBImage.stbi_image_free(pixels16);
+				stbi_image_free(pixels32);
+				stbi_image_free(pixels16);
 			}
-			memFree(comp);
-			memFree(h);
-			memFree(w);
 		}
 	}
 
@@ -116,7 +123,11 @@ public class Window {
 			public void invoke(long window, int width, int height) {
 				config.width = width;
 				config.height = height;
+				for(MouseCallback mc : mouseCallbacks){
+					mc.setSize(width, height);
+				}
 				glViewport(0, 0, width, height);
+
 			}
 		});
 	}
@@ -139,5 +150,6 @@ public class Window {
 
 	public void applyMouseCallback(MouseCallback mc) {
 		glfwSetCursorPosCallback(window, mc);
+		mouseCallbacks.add(mc);
 	}
 }

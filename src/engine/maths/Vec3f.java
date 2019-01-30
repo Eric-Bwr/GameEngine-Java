@@ -94,11 +94,11 @@ public class Vec3f {
         return z;
     }
 
-    public float mult(Vec3f vec2){
+    public float dot(Vec3f vec2){
         return this.x * vec2.x + this.y * vec2.y + this.z * vec2.z;
     }
 
-    public Vec3f dot(Vec3f vec3){
+    public Vec3f cross(Vec3f vec3){
         float y = this.y * vec3.z - this.z * vec3.y;
         float z = this.z * vec3.x - this.x * vec3.z;
         float x = this.x * vec3.y - this.y * vec3.x;
@@ -106,5 +106,16 @@ public class Vec3f {
         this.y = y;
         this.z = z;
         return new Vec3f(x, y, z);
+    }
+
+    public float distance(Vec3f other){
+        return distance(other.x, other.y, other.z);
+    }
+
+    public float distance(float x, float y, float z){
+        float dx = this.x - x;
+        float dy = this.y - y;
+        float dz = this.z - z;
+        return Mathf.sqrt(dx * dx + dy * dy + dz * dz);
     }
 }

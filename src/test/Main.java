@@ -45,7 +45,7 @@ public class Main implements EngineCallback {
 		config.title = "GameEngine";
 		config.width = 700;
 		config.height = 500;
-		config.windowIconPath = "res/dog.png";
+		config.windowIconPath = "dog.png";
 		config.rezisable = true;
 		config.vsync = false;
 		config.screenMode = ScreenMode.WINDOW;
@@ -77,12 +77,9 @@ public class Main implements EngineCallback {
 
 	@Override
 	public void render() {
-		float mx = Mapper.map((float)mc.getMouseX(), 0, config.width, -1, 1);
-		float my = Mapper.map((float)mc.getMouseY(), 0, config.height, 1, -1);
-
 		model.bind();
 		shader.bind();
-		shader.setUniform2f("mousePos", new Vec2f(mx, my));
+		shader.setUniform2f("mousePos", new Vec2f(mc.getMappedX(), mc.getMappedY()));
 		model.draw();
 		shader.unbind();
 		model.unbind();

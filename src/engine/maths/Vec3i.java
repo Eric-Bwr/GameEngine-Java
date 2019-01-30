@@ -53,7 +53,7 @@ public class Vec3i {
         return this;
     }
 
-    public int mult(Vec3i vec2){
+    public int dot(Vec3i vec2){
         return this.x * vec2.x + this.y * vec2.y + this.z * vec2.z;
     }
 
@@ -98,7 +98,7 @@ public class Vec3i {
         return z;
     }
 
-    public Vec3i dot(Vec3i vec3){
+    public Vec3i cross(Vec3i vec3){
         int y = this.y * vec3.z - this.z * vec3.y;
         int z = this.z * vec3.x - this.x * vec3.z;
         int x = this.x * vec3.y - this.y * vec3.x;
@@ -106,6 +106,17 @@ public class Vec3i {
         this.y = y;
         this.z = z;
         return new Vec3i(x, y, z);
+    }
+
+    public float distance(Vec3i other){
+        return distance(other.x, other.y, other.z);
+    }
+
+    public float distance(int x, int y, int z){
+        int dx = this.x - x;
+        int dy = this.y - y;
+        int dz = this.z - z;
+        return Mathf.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
 }
