@@ -42,11 +42,10 @@ public class Main implements EngineCallback {
 		config.windowIconPath = "dog.png";
 		config.rezisable = true;
 		config.vsync = false;
-		config.screenMode = ScreenMode.WINDOWED;
+		config.screenMode = ScreenMode.WINDOW;
 
 		gameEngine = new GameEngine(this, config, camera);
 		gameEngine.start();
-
 	}
 
 	@Override
@@ -63,7 +62,8 @@ public class Main implements EngineCallback {
 		shader = new Shader("Shaders/Basic.glsl");
 		Texture tex = new Texture("Textures/stallTexture.png");
 		model = modelLoader.loadModel("Objects/stall.obj", tex);
-		entity = new Entity(model, new Vec3f(0, 0, -25), 0, 0, 0, 1);
+		entity = new Entity(model, new Vec3f(0, 0, -25), 0, 0, 45, 1);
+		gameEngine.showMouse(false);
 	}
 
 	@Override
@@ -91,8 +91,6 @@ public class Main implements EngineCallback {
 		}
 	}
 
-	//TODO: Cleanup
-
 	@Override
 	public void render() {
 		camera.setRotY(camera.getRotY() - mouse.getDeltaX() * SENSITIVITY);
@@ -102,7 +100,7 @@ public class Main implements EngineCallback {
 		shader.bind();
 		shader.setUniformMat4f("projectionMatrix", Mat4f.projection(FOV, 4, 4, NEAR, FAR, null));
 		shader.setUniformMat4f("viewMatrix", camera.getViewMatrix());
-		//shader.setUniformMat4f("transformationMatrix", entity.getTransformationMatrix());
+		shader.setUniformMat4f("transformationMatrix", entity.getTransformationMatrix());
 		entity.draw();
 		shader.unbind();
 		entity.unbind();

@@ -110,7 +110,6 @@ public class GameEngine implements Runnable {
 		window.applyMouseCallback(mc);
 	}
 
-	//TODO: FIX NULLPTR
 	public void showMouse(boolean show){
 		if(show)
 			glfwSetInputMode(window.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

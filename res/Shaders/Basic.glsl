@@ -7,7 +7,7 @@ layout (location = 2) in vec3 normals;
 
 out vec2 outTextCoord;
 
-uniform mat4 transformationMatrix = mat4(1.0);
+uniform mat4 transformationMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 

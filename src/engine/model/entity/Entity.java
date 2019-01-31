@@ -11,7 +11,7 @@ public class Entity {
 	private float rotX, rotY, rotZ;
 	private float scale;
 
-	public Entity(Model model, Vec3f position, float scale, float rotX, float rotY, float rotZ){
+	public Entity(Model model, Vec3f position, float rotX, float rotY, float rotZ, float scale){
 		this.model = model;
 		this.position = position;
 		this.rotX = rotX;
@@ -86,7 +86,7 @@ public class Entity {
 		Mat4f.rotation(rotX, new Vec3f(1, 0, 0), transformation, transformation);
 		Mat4f.rotation(rotY, new Vec3f(0, 1, 0), transformation, transformation);
 		Mat4f.rotation(rotZ, new Vec3f(0, 0, 1), transformation, transformation);
-		Mat4f.scale(new Vec3f(scale, scale, scale), transformation, transformation);
+		Mat4f.scale(new Vec3f(getScale(), getScale(), getScale()), transformation, transformation);
 		return transformation;
 	}
 }

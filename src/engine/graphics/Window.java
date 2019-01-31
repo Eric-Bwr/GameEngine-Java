@@ -51,13 +51,12 @@ public class Window {
 			Log.logError("Failed to init GLFW!");
 			glfwTerminate();
 		}
-		glfwDefaultWindowHints();
 		initHints();
 		if (config.screenMode.equals(ScreenMode.FULLSCREEN)) {
 			glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 			GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 			window = glfwCreateWindow(vidMode.width(), vidMode.height(), config.title, glfwGetPrimaryMonitor(), NULL);
-		} else if(config.screenMode.equals(ScreenMode.WINDOWED)) {
+		} else if(config.screenMode.equals(ScreenMode.BORDERLESS)) {
 			glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 			GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 			window = glfwCreateWindow(vidMode.width(),vidMode.height(), config.title, NULL, NULL);
@@ -73,8 +72,6 @@ public class Window {
 		}
 		glfwMakeContextCurrent(window);
 		glfwShowWindow(window);
-		//TODO: FIX NULLPTR
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		callback.initCallbacks();
 		for(MouseCallback mc : mouseCallbacks){
 			mc.setSize(config.width, config.height);
@@ -83,7 +80,6 @@ public class Window {
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
-		glFrontFace(GL_CW);
 		initCallbacks();
 		setIcon();
 		if(config.vsync)
@@ -120,12 +116,31 @@ public class Window {
 	}
 
 	private void initHints(){
-		glfwWindowHint(GLFW_VERSION_MINOR, 3);
-		glfwWindowHint(GLFW_VERSION_MAJOR, 3);
+		glfwDefaultWindowHints();
+		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+		long temp = glfwCreateWindow(1, 1, "", NULL, NULL);
+		glfwMakeContextCurrent(temp);
+		GL.createCapabilities();
+		GLCapabilities caps = GL.getCapabilities();
+		glfwDestroyWindow(temp);
+		glfwDefaultWindowHints();
+		if (caps.OpenGL46) {
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+			Log.logInfo("Loading OpenGL 4.6");
+		} else if (caps.OpenGL21) {
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+			Log.logInfo("Loading OpenGL 2.1");
+		} else {
+			Log.logInfo("Neither OpenGL 3.2 nor OpenGL 2.1 is supported");
+		}
 		if(config.rezisable)
-			glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+			glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 		else
-			glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+			glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 	}
 
 	private void initCallbacks(){
