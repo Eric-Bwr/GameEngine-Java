@@ -4,9 +4,6 @@ import engine.callbacks.EngineCallback;
 import engine.callbacks.KeyCallback;
 import engine.callbacks.MouseCallback;
 import engine.graphics.Window;
-import engine.model.camera.Camera2D;
-import engine.model.camera.CameraAxis;
-import engine.model.camera.CameraFPS;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;

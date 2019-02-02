@@ -35,8 +35,8 @@ public class Window {
 		this.callback = callback;
 	}
 
-	public void initWindow(){
-		if(!glfwInit()){
+	public void initWindow() {
+		if (!glfwInit()) {
 			Log.logError("Failed to init GLFW!");
 			glfwTerminate();
 		}
@@ -61,6 +61,7 @@ public class Window {
 		}
 		glfwMakeContextCurrent(window);
 		glfwShowWindow(window);
+		glfwFocusWindow(window);
 		callback.initCallbacks();
 		for(MouseCallback mc : mouseCallbacks){
 			mc.setSize(config.width, config.height);
@@ -118,7 +119,7 @@ public class Window {
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-			Log.logInfo("Loading OpenGL 4.6");
+			Log.logInfo("Loading OpenGL 3.2");
 		} else if (caps.OpenGL21) {
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);

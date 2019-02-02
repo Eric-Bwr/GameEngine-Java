@@ -22,7 +22,7 @@ public class Main implements EngineCallback {
 	private static final float NEAR = 0.1f;
 	private static final float FAR = 1000;
 	private static final float SENSITIVITY = 0.1F;
-	private float moveSpeed = 0.1F;
+	private float moveSpeed = 0.2F;
 
 	private Shader shader;
 	private Entity entity;
@@ -37,12 +37,12 @@ public class Main implements EngineCallback {
 
 	public Main(){
 		config.title = "GameEngine";
-		config.width = 800;
-		config.height = 450;
+		config.width = 1000;
+		config.height = 700;
 		config.windowIconPath = "dog.png";
 		config.rezisable = true;
 		config.vsync = false;
-		config.screenMode = ScreenMode.BORDERLESS;
+		config.screenMode = ScreenMode.WINDOW;
 
 		gameEngine = new GameEngine(this, config);
 		gameEngine.start();
@@ -66,10 +66,17 @@ public class Main implements EngineCallback {
 		gameEngine.showMouse(false);
 	}
 
+	boolean rot = true;
+
 	@Override
 	public void tick(float dt) {
 		if (kc.isKeyCode(GLFW.GLFW_KEY_ESCAPE)) {
-			gameEngine.stop();
+			if(rot){
+				rot = false;
+				gameEngine.showMouse(true);}
+			else{
+				rot = true;
+			    gameEngine.showMouse(false);}
 		}
 		if(kc.isKeyCode(GLFW.GLFW_KEY_W)){
 			camera.moveForward(moveSpeed);
@@ -93,6 +100,7 @@ public class Main implements EngineCallback {
 
 	@Override
 	public void render() {
+		if(rot)
 		camera.rotate(mouse.getDeltaX(), mouse.getDeltaY(), SENSITIVITY);
 		mouse.reset();
 		entity.bind();
