@@ -5,8 +5,6 @@ import engine.ScreenMode;
 import engine.callbacks.EngineCallback;
 import engine.callbacks.KeyCallback;
 import engine.callbacks.MouseCallback;
-import engine.model.Camera2D;
-import engine.model.Camera3D;
 import engine.util.Log;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -31,19 +29,10 @@ public class Window {
 
 	private EngineConfig config;
 	private EngineCallback callback;
-	private Camera2D camera2D;
-	private Camera3D camera3D;
 
-	public Window(EngineCallback callback, EngineConfig config, Camera2D camera2D){
+	public Window(EngineCallback callback, EngineConfig config){
 		this.config = config;
 		this.callback = callback;
-		this.camera2D = camera2D;
-	}
-
-	public Window(EngineCallback callback, EngineConfig config, Camera3D camera3D){
-		this.config = config;
-		this.callback = callback;
-		this.camera3D = camera3D;
 	}
 
 	public void initWindow(){

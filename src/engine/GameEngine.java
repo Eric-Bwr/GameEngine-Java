@@ -4,8 +4,9 @@ import engine.callbacks.EngineCallback;
 import engine.callbacks.KeyCallback;
 import engine.callbacks.MouseCallback;
 import engine.graphics.Window;
-import engine.model.Camera2D;
-import engine.model.Camera3D;
+import engine.model.camera.Camera2D;
+import engine.model.camera.CameraAxis;
+import engine.model.camera.CameraFPS;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
@@ -17,24 +18,15 @@ public class GameEngine implements Runnable {
 	private static final int TICKS_PER_SECOND = 60;
 
 	public EngineCallback engineCallback;
-	public Camera2D camera2D;
-	public Camera3D camera3D;
 
 	private Window window;
 	private boolean running;
 
 	private Thread thread;
 
-	public GameEngine(EngineCallback callback, EngineConfig config, Camera2D camera2D){
+	public GameEngine(EngineCallback callback, EngineConfig config){
 		this.engineCallback = callback;
-		this.camera2D = camera2D;
-		window = new Window(callback, config, camera2D);
-	}
-
-	public GameEngine(EngineCallback callback, EngineConfig config, Camera3D camera3D){
-		this.engineCallback = callback;
-		this.camera3D = camera3D;
-		window = new Window(callback, config, camera3D);
+		window = new Window(callback, config);
 	}
 
 	public void start(){

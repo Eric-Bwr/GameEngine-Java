@@ -11,10 +11,9 @@ import engine.graphics.Shader;
 import engine.graphics.Texture;
 import engine.maths.Mat4f;
 import engine.maths.Vec3f;
-import engine.model.Camera3D;
 import engine.model.ModelLoader;
+import engine.model.camera.CameraFPS;
 import engine.model.entity.Entity;
-import engine.util.Log;
 import org.lwjgl.glfw.GLFW;
 
 public class Main implements EngineCallback {
@@ -34,7 +33,7 @@ public class Main implements EngineCallback {
 	private MouseCallback mouse;
 	private GameEngine gameEngine;
 	private EngineConfig config = new EngineConfig();
-	private Camera3D camera = new Camera3D(new Vec3f(0, 0, 0), 0, 0, 0, true);
+	private CameraFPS camera = new CameraFPS(new Vec3f(0, 0, 0), 0, 0);
 
 	public Main(){
 		config.title = "GameEngine";
@@ -43,9 +42,9 @@ public class Main implements EngineCallback {
 		config.windowIconPath = "dog.png";
 		config.rezisable = true;
 		config.vsync = false;
-		config.screenMode = ScreenMode.WINDOW;
+		config.screenMode = ScreenMode.BORDERLESS;
 
-		gameEngine = new GameEngine(this, config, camera);
+		gameEngine = new GameEngine(this, config);
 		gameEngine.start();
 	}
 
