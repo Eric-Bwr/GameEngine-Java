@@ -95,7 +95,6 @@ public class Main implements EngineCallback {
 	@Override
 	public void render() {
 		camera.rotate(mouse.getDeltaX(), mouse.getDeltaY(), SENSITIVITY);
-		Log.log(camera.getYaw());
 		mouse.reset();
 		entity.bind();
 		shader.bind();
