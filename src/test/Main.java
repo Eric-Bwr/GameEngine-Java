@@ -14,6 +14,7 @@ import engine.maths.Vec3f;
 import engine.model.Camera3D;
 import engine.model.ModelLoader;
 import engine.model.entity.Entity;
+import engine.util.Log;
 import org.lwjgl.glfw.GLFW;
 
 public class Main implements EngineCallback {
@@ -33,7 +34,7 @@ public class Main implements EngineCallback {
 	private MouseCallback mouse;
 	private GameEngine gameEngine;
 	private EngineConfig config = new EngineConfig();
-	private Camera3D camera = new Camera3D(new Vec3f(0, 0, 0), 0, 0, 0);
+	private Camera3D camera = new Camera3D(new Vec3f(0, 0, 0), 0, 0, true);
 
 	public Main(){
 		config.title = "GameEngine";
@@ -72,29 +73,29 @@ public class Main implements EngineCallback {
 			gameEngine.stop();
 		}
 		if(kc.isKeyCode(GLFW.GLFW_KEY_W)){
-			camera.move(new Vec3f(0.0F, 0.0F, moveSpeed));
+			camera.moveForward(moveSpeed);
 		}
 		if(kc.isKeyCode(GLFW.GLFW_KEY_S)){
-			camera.move(new Vec3f(0.0F, 0.0F, -moveSpeed));
+			camera.moveBackwards(moveSpeed);
 		}
 		if(kc.isKeyCode(GLFW.GLFW_KEY_A)){
-			camera.move(new Vec3f(moveSpeed, 0.0F, 0.0F));
+			camera.moveLeft(moveSpeed);
 		}
 		if(kc.isKeyCode(GLFW.GLFW_KEY_D)){
-			camera.move(new Vec3f(-moveSpeed, 0.0F, 0.0F));
+			camera.moveRight(moveSpeed);
 		}
 		if(kc.isKeyCode(GLFW.GLFW_KEY_SPACE)){
-			camera.move(new Vec3f(0.0F, -moveSpeed, 0.0F));
+			camera.moveUp(moveSpeed);
 		}
 		if(kc.isKeyCode(GLFW.GLFW_KEY_LEFT_SHIFT)){
-			camera.move(new Vec3f(0.0F, moveSpeed, 0.0F));
+			camera.moveDown(moveSpeed);
 		}
 	}
 
 	@Override
 	public void render() {
-		camera.setRotY(camera.getRotY() - mouse.getDeltaX() * SENSITIVITY);
-		camera.setRotX(camera.getRotX() - mouse.getDeltaY() * SENSITIVITY);
+		camera.rotate(mouse.getDeltaX(), mouse.getDeltaY(), SENSITIVITY);
+		Log.log(camera.getYaw());
 		mouse.reset();
 		entity.bind();
 		shader.bind();

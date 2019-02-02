@@ -2,17 +2,82 @@ package engine.model;
 
 import engine.maths.Mat4f;
 import engine.maths.Vec3f;
+import engine.util.Log;
 
 public class Camera3D {
 
 	private Vec3f position;
-	private float rotX, rotY, rotZ;
+	private float yaw, pitch, blockUp = 90.0F, blockDown = -90.0F;
+	private boolean axis;
 
-	public Camera3D(Vec3f vec, float rotX, float rotY, float rotZ){
-		this.rotX = rotX;
-		this.rotY = rotY;
-		this.rotZ = rotZ;
+	public Camera3D(Vec3f vec, float yaw, float pitch, boolean axis){
+		this.yaw = yaw;
+		this.pitch = pitch;
 		this.position = vec;
+		this.axis = axis;
+	}
+
+	public void blockYawUpwards(float block){
+		this.blockUp = block;
+	}
+
+	public void blockYawDownwards(float block){
+		this.blockDown = block;
+	}
+
+	public float getBlockYawUp() {
+		return blockUp;
+	}
+
+	public float getBlockYawDown() {
+		return blockDown;
+	}
+
+	public void moveForward(float speed){
+		if(axis)
+			this.position.add(new Vec3f(0.0F, 0.0F, speed));
+		else{
+			//TODO: Implement
+		}
+	}
+
+	public void moveBackwards(float speed){
+		if(axis)
+			this.position.add(new Vec3f(0.0F, 0.0F, -speed));
+		else{
+			//TODO: Implement
+		}
+	}
+
+	public void moveRight(float speed){
+		if(axis)
+			this.position.add(new Vec3f(-speed, 0.0F, 0.0F));
+		else{
+			//TODO: Implement
+		}
+	}
+
+	public void moveLeft(float speed){
+		if(axis)
+			this.position.add(new Vec3f(speed, 0.0F, 0.0F));
+		else{
+			//TODO: Implement
+		}
+	}
+
+	public void moveUp(float speed){
+		this.position.add(new Vec3f(0.0F, -speed, 0.0F));
+	}
+
+	public void moveDown(float speed){
+		this.position.add(new Vec3f(0.0F, speed, 0.0F));
+	}
+
+	public void rotate(float mouseDeltaX, float mouseDeltaY, float sensitivity){
+		float resultYaw = this.yaw - mouseDeltaY * sensitivity;
+		if(!(resultYaw > blockUp || resultYaw < blockDown))
+			this.yaw = resultYaw;
+		this.pitch = this.pitch - mouseDeltaX * sensitivity;
 	}
 
 	public Vec3f getPosition(){
@@ -23,37 +88,26 @@ public class Camera3D {
 		this.position = position;
 	}
 
-	public float getRotX() { return rotX; }
-
-	public void setRotX(float rotX) {
-		this.rotX = rotX;
+	public float getYaw() {
+		return yaw;
 	}
 
-	public float getRotY() {
-		return rotY;
+	public void setYaw(float yaw) {
+		this.yaw = yaw;
 	}
 
-	public void setRotY(float rotY) {
-		this.rotY = rotY;
+	public float getPitch() {
+		return pitch;
 	}
 
-	public float getRotZ() {
-		return rotZ;
-	}
-
-	public void setRotZ(float rotZ) {
-		this.rotZ = rotZ;
-	}
-
-	public void move(Vec3f direction){
-		this.setPosition(getPosition().add(direction));
+	public void setPitch(float pitch) {
+		this.pitch = pitch;
 	}
 
 	public Mat4f getViewMatrix(){
         Mat4f view = Mat4f.identity();
-        Mat4f.rotation(rotX, new Vec3f(1, 0, 0), view, view);
-        Mat4f.rotation(rotY, new Vec3f(0, 1, 0), view, view);
-        Mat4f.rotation(rotZ, new Vec3f(0, 0, 1), view, view);
+        Mat4f.rotation(yaw, new Vec3f(1, 0, 0), view, view);
+        Mat4f.rotation(pitch, new Vec3f(0, 1, 0), view, view);
         Mat4f.translate(position, view, view);
 	    return view;
 	}
