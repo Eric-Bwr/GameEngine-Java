@@ -34,7 +34,7 @@ public class Main implements EngineCallback {
 	private MouseCallback mouse;
 	private GameEngine gameEngine;
 	private EngineConfig config = new EngineConfig();
-	private Camera3D camera = new Camera3D(new Vec3f(0, 0, 0), 0, 0, true);
+	private Camera3D camera = new Camera3D(new Vec3f(0, 0, 0), 0, 0, 0, true);
 
 	public Main(){
 		config.title = "GameEngine";

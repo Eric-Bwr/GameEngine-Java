@@ -2,17 +2,17 @@ package engine.model;
 
 import engine.maths.Mat4f;
 import engine.maths.Vec3f;
-import engine.util.Log;
 
 public class Camera3D {
 
 	private Vec3f position;
-	private float yaw, pitch, blockUp = 90.0F, blockDown = -90.0F;
+	private float yaw, pitch, roll, blockUp = 90.0F, blockDown = -90.0F;
 	private boolean axis;
 
-	public Camera3D(Vec3f vec, float yaw, float pitch, boolean axis){
+	public Camera3D(Vec3f vec, float yaw, float pitch, float roll, boolean axis){
 		this.yaw = yaw;
 		this.pitch = pitch;
+		this.roll = roll;
 		this.position = vec;
 		this.axis = axis;
 	}
@@ -96,6 +96,14 @@ public class Camera3D {
 		this.yaw = yaw;
 	}
 
+	public float getRoll() {
+		return roll;
+	}
+
+	public void setRoll(float roll) {
+		this.roll = roll;
+	}
+
 	public float getPitch() {
 		return pitch;
 	}
@@ -108,6 +116,7 @@ public class Camera3D {
         Mat4f view = Mat4f.identity();
         Mat4f.rotation(yaw, new Vec3f(1, 0, 0), view, view);
         Mat4f.rotation(pitch, new Vec3f(0, 1, 0), view, view);
+		Mat4f.rotation(roll, new Vec3f(0, 0, 1), view, view);
         Mat4f.translate(position, view, view);
 	    return view;
 	}
