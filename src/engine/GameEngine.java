@@ -4,6 +4,7 @@ import engine.callbacks.EngineCallback;
 import engine.callbacks.KeyCallback;
 import engine.callbacks.MouseCallback;
 import engine.graphics.Window;
+import engine.graphics.gui.UIText;
 import engine.maths.Vec2i;
 import org.lwjgl.glfw.GLFWVidMode;
 
@@ -97,6 +98,11 @@ public class GameEngine implements Runnable {
 		window.applyCallback(object);
 	}
 
+	public void applyUI(Object object) {
+		if(object instanceof UIText){
+			//TODO: Maybe move this in a "UIMaster" Class
+		}
+	}
 	public void showMouse(boolean show){
 		if(show)
 			glfwSetInputMode(window.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
