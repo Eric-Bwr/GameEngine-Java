@@ -1,2 +1,2 @@
 # GameEngine
-GameEngine written in Java using LWJGL
+2D/3D GameEngine written in Java using LWJGL
