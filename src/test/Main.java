@@ -15,6 +15,7 @@ import engine.maths.Vec3f;
 import engine.model.ModelLoader;
 import engine.model.camera.CameraFPS;
 import engine.model.entity.Entity;
+import engine.util.Log;
 import org.lwjgl.glfw.GLFW;
 
 public class Main implements EngineCallback {
@@ -44,7 +45,7 @@ public class Main implements EngineCallback {
 		config.windowIconPath = "dog.png";
 		config.rezisable = true;
 		config.vsync = false;
-		config.screenMode = ScreenMode.BORDERLESS;
+		config.screenMode = ScreenMode.WINDOW;
 
 		gameEngine = new GameEngine(this, config);
 		gameEngine.start();
