@@ -1,6 +1,5 @@
 package engine.util;
 
-import engine.maths.Mat4f;
 import engine.maths.Vec2f;
 import engine.maths.Vec3f;
 
@@ -24,18 +23,7 @@ public class Log {
 
 	public static void log(float input){ System.out.println(input); }
 
-	//public static void log(Mat4f mat){
-	//	StringBuilder sb = new StringBuilder("[");
-	//	sb.append(String.format("%s, %s, %s, %s", mat.values[0], mat.values[1], mat.values[2], mat.values[3])).append
-	// ("\n ");
-	//	sb.append(String.format("%s, %s, %s, %s", mat.values[4], mat.values[5], mat.values[6], mat.values[7])).append
-	// ("\n ");
-	//	sb.append(String.format("%s, %s, %s, %s", mat.values[8], mat.values[9], mat.values[10], mat.values[11]))
-	// .append("\n ");
-	//	sb.append(String.format("%s, %s, %s, %s", mat.values[12], mat.values[13], mat.values[14], mat.values[15]));
-	//	sb.append("]");
-	//	System.out.println(sb.toString());
-	//}
+	public static void log(boolean input){ System.out.println(input ? "TRUE" : "FALSE"); }
 
 	public static void log3FArray(float[] data){
 		for(int n = 0; n < data.length; n++){

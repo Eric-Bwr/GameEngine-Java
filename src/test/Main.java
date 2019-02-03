@@ -4,6 +4,7 @@ import engine.EngineConfig;
 import engine.GameEngine;
 import engine.ScreenMode;
 import engine.callbacks.EngineCallback;
+import engine.callbacks.FocusCallback;
 import engine.callbacks.KeyCallback;
 import engine.callbacks.MouseCallback;
 import engine.graphics.Model;
@@ -30,6 +31,7 @@ public class Main implements EngineCallback {
 	private ModelLoader modelLoader = new ModelLoader();
 
 	private KeyCallback kc;
+	private FocusCallback fc;
 	private MouseCallback mouse;
 	private GameEngine gameEngine;
 	private EngineConfig config = new EngineConfig();
@@ -42,7 +44,7 @@ public class Main implements EngineCallback {
 		config.windowIconPath = "dog.png";
 		config.rezisable = true;
 		config.vsync = false;
-		config.screenMode = ScreenMode.WINDOW;
+		config.screenMode = ScreenMode.BORDERLESS;
 
 		gameEngine = new GameEngine(this, config);
 		gameEngine.start();
@@ -55,6 +57,9 @@ public class Main implements EngineCallback {
 
 		mouse = new MouseCallback();
 		gameEngine.applyCallback(mouse);
+
+		fc = new FocusCallback();
+		gameEngine.applyCallback(fc);
 	}
 
 	@Override
@@ -70,6 +75,7 @@ public class Main implements EngineCallback {
 
 	@Override
 	public void tick(float dt) {
+		entity.setRotY(entity.getRotY() + 0.1F);
 		if (kc.isKeyCode(GLFW.GLFW_KEY_ESCAPE)) {
 			if(rot){
 				rot = false;
@@ -101,7 +107,7 @@ public class Main implements EngineCallback {
 	@Override
 	public void render() {
 		if(rot)
-		camera.rotate(mouse.getDeltaX(), mouse.getDeltaY(), SENSITIVITY);
+			camera.rotate(mouse.getDeltaX(), mouse.getDeltaY(), SENSITIVITY);
 		mouse.reset();
 		entity.bind();
 		shader.bind();

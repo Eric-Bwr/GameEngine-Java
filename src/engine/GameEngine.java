@@ -4,6 +4,8 @@ import engine.callbacks.EngineCallback;
 import engine.callbacks.KeyCallback;
 import engine.callbacks.MouseCallback;
 import engine.graphics.Window;
+import engine.maths.Vec2i;
+import org.lwjgl.glfw.GLFWVidMode;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
@@ -91,12 +93,8 @@ public class GameEngine implements Runnable {
 		}
 	}
 
-	public void applyCallback(KeyCallback kc){
-		window.applyKeyCallback(kc);
-	}
-
-	public void applyCallback(MouseCallback mc){
-		window.applyMouseCallback(mc);
+	public void applyCallback(Object object){
+		window.applyCallback(object);
 	}
 
 	public void showMouse(boolean show){
@@ -108,5 +106,10 @@ public class GameEngine implements Runnable {
 
 	public void setMousePosition(float x, float y){
 		glfwSetCursorPos(window.window, x, y);
+	}
+
+	public Vec2i getScreenSize() {
+		GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		return new Vec2i(vidMode.width(), vidMode.height());
 	}
 }

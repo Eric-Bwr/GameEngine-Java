@@ -5,6 +5,7 @@ import engine.ScreenMode;
 import engine.callbacks.EngineCallback;
 import engine.callbacks.KeyCallback;
 import engine.callbacks.MouseCallback;
+import engine.callbacks.FocusCallback;
 import engine.util.Log;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -68,8 +69,6 @@ public class Window {
 		}
 		GL.createCapabilities();
 		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
 		initCallbacks();
 		setIcon();
 		if(config.vsync)
@@ -159,12 +158,14 @@ public class Window {
 		glfwTerminate();
 	}
 
-	public void applyKeyCallback(KeyCallback kc){
-		glfwSetKeyCallback(window, kc);
-	}
-
-	public void applyMouseCallback(MouseCallback mc) {
-		glfwSetCursorPosCallback(window, mc);
-		mouseCallbacks.add(mc);
+	public void applyCallback(Object object) {
+		if(object instanceof MouseCallback){
+			glfwSetCursorPosCallback(window, (MouseCallback)object);
+			mouseCallbacks.add((MouseCallback)object);
+		}else if(object instanceof KeyCallback){
+			glfwSetKeyCallback(window, (KeyCallback)object);
+		}else if(object instanceof FocusCallback){
+			glfwSetWindowFocusCallback(window, (FocusCallback)object);
+		}
 	}
 }

@@ -24,7 +24,6 @@ public class ModelLoader {
         float[] textureArray = null;
         int[] indicesArray = null;
         try {
-
             while (true){
                 line = reader.readLine();
                 String[] currentLine = line.split(" ");
@@ -46,7 +45,6 @@ public class ModelLoader {
                     break;
                 }
             }
-
             while(line != null){
                 if (!line .startsWith("f ")){
                     line = reader.readLine();
