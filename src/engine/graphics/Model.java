@@ -10,7 +10,7 @@ public class Model  {
     private VertexArrayObject vao;
 
     public Model(Texture texture, float[] vpos, float[] texCoords, float[] normals, int[] indices) {
-        vao = new VertexArrayObject(vpos, texCoords, normals, indices);
+        vao = new VertexArrayObject(vpos, texCoords, normals, indices, false);
         this.texture = texture;
     }
 

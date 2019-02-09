@@ -125,5 +125,5 @@ public class Shader {
 
 	public void setUniform3f(String name, Vec3f vector){ glUniform3f(getUniform(name), vector.x(), vector.y(), vector.z()); }
 
-	public void setUniform4f(String name, float x, float y, float z, float w){ glUniform4f(getUniform(name), x, y, z, w); }
+	public void setUniform4f(String name, Vec4f vec){ glUniform4f(getUniform(name), vec.x(), vec.y(), vec.z(), vec.w()); }
 }

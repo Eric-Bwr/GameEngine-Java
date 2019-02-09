@@ -1,69 +1,63 @@
 package engine.maths;
 
-public class Vec3f {
+public class Vec4f {
 
     private float x;
     private float y;
     private float z;
+    private float w;
 
-    public Vec3f(float w){
+    public Vec4f(float w){
         this.x = w;
         this.y = w;
         this.z = w;
+        this.w = w;
     }
 
-    public Vec3f(float x, float y, float z) {
+    public Vec4f(float x, float y, float z, float w) {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.w = w;
     }
 
-    public Vec3f add(Vec3f vec2){
+    public Vec4f add(Vec4f vec2){
         this.x += vec2.x();
         this.y += vec2.y();
         this.z += vec2.z();
+        this.w += vec2.w();
         return this;
     }
 
-    public Vec3f sub(Vec3f vec2){
+    public Vec4f sub(Vec4f vec2){
         this.x -= vec2.x();
         this.y -= vec2.y();
         this.z -= vec2.z();
+        this.w -= vec2.w();
         return this;
     }
 
-    public Vec3f add(float x, float y, float z){
+    public Vec4f add(float x, float y, float z, float w){
         this.x += x;
         this.y += y;
         this.z += z;
+        this.w += w;
         return this;
     }
 
-    public Vec3f sub(float x, float y, float z){
+    public Vec4f sub(float x, float y, float z, float w){
         this.x -= x;
         this.y -= y;
         this.z -= z;
+        this.w -= w;
         return this;
     }
 
-    public Vec3f mult(float f){
+    public Vec4f mult(float f){
         this.x *= f;
         this.y *= f;
         this.z *= f;
-        return this;
-    }
-
-    public float length(){
-        return (float) Math.sqrt(x * x + y * y + z * z);
-    }
-
-    public Vec3f normalize(){
-        float xx = (1 / length()) * this.x;
-        float yy = (1 / length()) * this.y;
-        float zz = (1 / length()) * this.z;
-        this.x = xx;
-        this.y = yy;
-        this.z = zz;
+        this.w *= f;
         return this;
     }
 
@@ -77,6 +71,10 @@ public class Vec3f {
 
     public float z(){
         return z;
+    }
+
+    public float w(){
+        return w;
     }
 
     public float y(float y){
@@ -94,21 +92,16 @@ public class Vec3f {
         return z;
     }
 
-    public float dot(Vec3f vec2){
-        return this.x * vec2.x + this.y * vec2.y + this.z * vec2.z;
+    public float w(float w){
+        this.w = w;
+        return w;
     }
 
-    public Vec3f cross(Vec3f vec3){
-        float y = this.y * vec3.z - this.z * vec3.y;
-        float z = this.z * vec3.x - this.x * vec3.z;
-        float x = this.x * vec3.y - this.y * vec3.x;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        return new Vec3f(x, y, z);
+    public float dot(Vec4f vec2){
+        return this.x * vec2.x() + this.y * vec2.y() + this.z * vec2.z() + this.w * vec2.w();
     }
 
-    public float distance(Vec3f other){
+    public float distance(Vec4f other){
         return distance(other.x, other.y, other.z);
     }
 
@@ -116,6 +109,8 @@ public class Vec3f {
         float dx = this.x - x;
         float dy = this.y - y;
         float dz = this.z - z;
-        return Mathf.sqrt(dx * dx + dy * dy + dz * dz);
+        float dw = this.w - w;
+        return Mathf.sqrt(dx * dx + dy * dy + dz * dz + dw * dw);
     }
+
 }

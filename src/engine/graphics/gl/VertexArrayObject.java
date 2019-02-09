@@ -11,23 +11,30 @@ public class VertexArrayObject {
     private VertexBufferObject normals;
     private int vertexCount;
 
-    public VertexArrayObject(float[] vpos, float[] texCoords, float[] normals, int[] indices){
+    private boolean simple;
+
+    public VertexArrayObject(float[] vpos, float[] texCoords, float[] normals, int[] indices, boolean simple){
         this.id = glGenVertexArrays();
         glBindVertexArray(id);
         this.indices = new IndicesBufferObject(indices);
         this.position = new VertexBufferObject(0, vpos, 3);
-        this.texCoords = new VertexBufferObject(1, texCoords, 2);
-        this.normals = new VertexBufferObject(2, normals, 3);
+        if(!simple){
+            this.texCoords = new VertexBufferObject(1, texCoords, 2);
+            this.normals = new VertexBufferObject(2, normals, 3);
+        }
         glBindVertexArray(0);
         this.vertexCount = indices.length;
+        this.simple = simple;
     }
 
     public void bind(){
         glBindVertexArray(id);
         indices.bind();
         position.bind();
-        texCoords.bind();
-        normals.bind();
+        if(!simple){
+            texCoords.bind();
+            normals.bind();
+        }
     }
 
     public void draw(){
@@ -42,9 +49,11 @@ public class VertexArrayObject {
 
     public void unbind(){
         indices.unbind();
-        normals.unbind();
         position.unbind();
-        texCoords.unbind();
+        if(!simple){
+            normals.unbind();
+            texCoords.unbind();
+        }
         glBindVertexArray(0);
     }
 
@@ -55,10 +64,12 @@ public class VertexArrayObject {
     }
 
     public void cleanUpMemory(){
-        texCoords.cleanUpMemory();
-        position.cleanUpMemory();
         indices.cleanUpMemory();
-        normals.cleanUpMemory();
+        position.cleanUpMemory();
+        if(!simple){
+            texCoords.cleanUpMemory();
+            normals.cleanUpMemory();
+        }
         unbind();
         glDeleteVertexArrays(id);
     }
