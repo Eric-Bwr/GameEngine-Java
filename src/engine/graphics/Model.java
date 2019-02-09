@@ -14,10 +14,14 @@ public class Model  {
         this.texture = texture;
     }
 
-    public void bind(){
+    public void bind() {
         glActiveTexture(GL_TEXTURE0);
         texture.bind();
         vao.bind();
+    }
+
+    public void renderToScreen(){
+        vao.renderToScreen();
     }
 
     public void draw(){

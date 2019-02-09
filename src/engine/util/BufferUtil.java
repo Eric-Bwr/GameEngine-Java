@@ -2,7 +2,6 @@ package engine.util;
 
 import org.lwjgl.BufferUtils;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
@@ -19,21 +18,25 @@ public class BufferUtil {
 		return newBuffer;
 	}
 
-	public static ByteBuffer ioResourceToByteBuffer(String resource, int bufferSize) throws IOException {
-		ByteBuffer buffer;
+	public static ByteBuffer ioResourceToByteBuffer(String resource, int bufferSize){
+		ByteBuffer buffer = null;
+		try{
 		try (
-			InputStream source = Class.class.getResourceAsStream("/"+resource);
-			ReadableByteChannel rbc = Channels.newChannel(source)) {
-			buffer = createByteBuffer(bufferSize);
-			while ( true ) {
-				int bytes = rbc.read(buffer);
-				if ( bytes == -1 )
-					break;
-				if ( buffer.remaining() == 0 )
-					buffer = resizeBuffer(buffer, buffer.capacity() * 2);
+			InputStream source = Class.class.getResourceAsStream("/" + resource);
+			ReadableByteChannel rbc = Channels.newChannel(source)){
+				buffer = createByteBuffer(bufferSize);
+				while (true) {
+					int bytes = rbc.read(buffer);
+					if (bytes == -1)
+						break;
+					if (buffer.remaining() == 0)
+						buffer = resizeBuffer(buffer, buffer.capacity() * 2);
+				}
 			}
+			buffer.flip();
+		}catch (Exception e){
+			Log.logError("Failed to load Resource to ByteBuffer: " + resource);
 		}
-		buffer.flip();
 		return buffer;
 	}
 }

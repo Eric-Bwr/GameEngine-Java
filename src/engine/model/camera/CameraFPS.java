@@ -1,7 +1,9 @@
 package engine.model.camera;
 
 import engine.maths.Mat4f;
+import engine.maths.Vec2f;
 import engine.maths.Vec3f;
+import engine.util.Log;
 
 import static engine.maths.Mathf.*;
 
@@ -70,11 +72,11 @@ public class CameraFPS {
 	}
 
 	public Vec3f getPosition(){
-		return position;
+		return position.negate();
 	}
 
 	public void setPosition(Vec3f position) {
-		this.position = position;
+		this.position = position.negate();
 	}
 
 	public Mat4f getViewMatrix(){

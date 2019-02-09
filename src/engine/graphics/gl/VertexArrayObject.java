@@ -73,5 +73,4 @@ public class VertexArrayObject {
         unbind();
         glDeleteVertexArrays(id);
     }
-
 }

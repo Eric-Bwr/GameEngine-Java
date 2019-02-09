@@ -79,15 +79,12 @@ public class Window {
 	}
 
 	public void setIcon() {
+		Log.log(config.windowIconPath);
 		if(!(config.windowIconPath.equals(""))) {
 			ByteBuffer icon16;
 			ByteBuffer icon32;
-			try {
-				icon16 = ioResourceToByteBuffer(config.windowIconPath, 2048);
-				icon32 = ioResourceToByteBuffer(config.windowIconPath, 4096);
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
+			icon16 = ioResourceToByteBuffer(config.windowIconPath, 2048);
+			icon32 = ioResourceToByteBuffer(config.windowIconPath, 4096);
 			IntBuffer w = memAllocInt(1);
 			IntBuffer h = memAllocInt(1);
 			IntBuffer comp = memAllocInt(1);

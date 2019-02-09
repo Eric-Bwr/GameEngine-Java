@@ -5,6 +5,11 @@ public class Mathf {
     public static final float PI = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317248111745028410270193852110555964462294895493038196442881097566593344612847564823378678316527120190914564856692F;
     public static final double PIS_LITTLE_BROTHER = 3.14159265D;
 
+    public static float round(float value, int decimals){
+        float f = pow(10, decimals);
+        return (float)Math.round(value * f) / f;
+    }
+
     public static float sin(float value){
         return (float) Math.sin(Math.toRadians(value));
     }

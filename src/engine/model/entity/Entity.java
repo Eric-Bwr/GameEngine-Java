@@ -89,4 +89,8 @@ public class Entity {
 		Mat4f.scale(new Vec3f(getScale(), getScale(), getScale()), transformation, transformation);
 		return transformation;
 	}
+
+    public void cleanUpMemory() {
+    	model.cleanUpMemory();
+	}
 }

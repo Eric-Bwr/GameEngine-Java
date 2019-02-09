@@ -113,4 +113,12 @@ public class Vec4f {
         return Mathf.sqrt(dx * dx + dy * dy + dz * dz + dw * dw);
     }
 
+    public Vec3f xyz(){
+        return new Vec3f(x, y, z);
+    }
+
+    public Vec2f xy(){
+        return new Vec2f(x, y);
+    }
+
 }

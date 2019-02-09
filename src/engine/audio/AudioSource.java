@@ -25,8 +25,9 @@ public class AudioSource {
 	private ByteBuffer vorbis = null;
 
 	private float rollOffFactor, referenceDistance, maxDistance;
-
-	private Vec3f position;
+	private float pitch, volume;
+	private boolean loop, relative;
+	private Vec3f position, velocity;
 
 	public AudioSource(String file) {
 		AudioMaster.audioSources.add(this);
@@ -58,26 +59,22 @@ public class AudioSource {
 		this.maxDistance = distance;
 	}
 
-	//TODO: getter
-
 	public void setLooping(boolean loop){
 		if(loop) {
 			alSourcei(sourceId, AL_LOOPING, AL_TRUE);
-
 		}else{
 			alSourcei(sourceId, AL_LOOPING, AL_FALSE);
-
 		}
+		this.loop = loop;
 	}
 
 	public void setRelative(boolean relative){
 		if(relative) {
 			alSourcei(sourceId, AL_SOURCE_RELATIVE, AL_TRUE);
-
-		}else{
+		} else {
 			alSourcei(sourceId, AL_SOURCE_RELATIVE, AL_FALSE);
-
 		}
+		this.relative = relative;
 	}
 
 	public void setPosition(Vec3f position) {
@@ -87,22 +84,57 @@ public class AudioSource {
 
 	public void setVelocity(Vec3f velocity) {
 		alSource3f(sourceId, AL_VELOCITY, velocity.x(), velocity.y(), velocity.z());
+		this.velocity = velocity;
 	}
 
 	public void setPitch(float pitch) {
 		alSourcef(sourceId, AL_PITCH, pitch);
+		this.pitch = pitch;
 	}
 
-	public void setGain(float gain) {
-		alSourcef(sourceId, AL_GAIN, gain);
+	public void setVolume(float volume) {
+		alSourcef(sourceId, AL_GAIN, volume);
+		this.volume = volume;
 	}
 
-	public void setProperty(int param, float value) {
-		alSourcef(sourceId, param, value);
+	public float getRollOffFactor() {
+		return rollOffFactor;
+	}
+
+	public float getReferenceDistance() {
+		return referenceDistance;
+	}
+
+	public float getMaxDistance() {
+		return maxDistance;
+	}
+
+	public float getPitch() {
+		return pitch;
+	}
+
+	public float getVolume() {
+		return volume;
+	}
+
+	public boolean isLoop() {
+		return loop;
+	}
+
+	public boolean isRelative() {
+		return relative;
 	}
 
 	public Vec3f getPosition() {
 		return position;
+	}
+
+	public Vec3f getVelocity() {
+		return velocity;
+	}
+
+	public void setProperty(int param, float value) {
+		alSourcef(sourceId, param, value);
 	}
 
 	public void play() {

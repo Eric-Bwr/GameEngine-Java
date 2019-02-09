@@ -1,5 +1,6 @@
 package engine.maths;
 
+import engine.util.StringUtil;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -24,10 +25,14 @@ public class Mat4f {
     public float m33;
 
     public FloatBuffer toFloatBuffer(){
-        float[] values = new float[]{m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33};
+        float[] values = getValues();
         FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
         buffer.put(values).flip();
         return buffer;
+    }
+    
+    public float[] getValues(){
+        return new float[]{m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33};
     }
 
     public static Mat4f identity() {
@@ -73,32 +78,32 @@ public class Mat4f {
         if(out == null){
             out = Mat4f.identity();
         }
-        final float c = Mathf.cos(angle);
-        final float s = Mathf.sin(angle);
-        final float oneminusc = 1.0f - c;
-        final float xy = axis.x() * axis.y();
-        final float yz = axis.y() * axis.z();
-        final float xz = axis.x() * axis.z();
-        final float xs = axis.x() * s;
-        final float ys = axis.y() * s;
-        final float zs = axis.z() * s;
-        final float f00 = axis.x() * axis.x() * oneminusc + c;
-        final float f2 = xy * oneminusc + zs;
-        final float f3 = xz * oneminusc - ys;
-        final float f4 = xy * oneminusc - zs;
-        final float f5 = axis.y() * axis.y() * oneminusc + c;
-        final float f6 = yz * oneminusc + xs;
-        final float f7 = xz * oneminusc + ys;
-        final float f8 = yz * oneminusc - xs;
-        final float f9 = axis.z() * axis.z() * oneminusc + c;
-        final float t00 = from.m00 * f00 + from.m10 * f2 + from.m20 * f3;
-        final float t2 = from.m01 * f00 + from.m11 * f2 + from.m21 * f3;
-        final float t3 = from.m02 * f00 + from.m12 * f2 + from.m22 * f3;
-        final float t4 = from.m03 * f00 + from.m13 * f2 + from.m23 * f3;
-        final float t5 = from.m00 * f4 + from.m10 * f5 + from.m20 * f6;
-        final float t6 = from.m01 * f4 + from.m11 * f5 + from.m21 * f6;
-        final float t7 = from.m02 * f4 + from.m12 * f5 + from.m22 * f6;
-        final float t8 = from.m03 * f4 + from.m13 * f5 + from.m23 * f6;
+        float c = Mathf.cos(angle);
+        float s = Mathf.sin(angle);
+        float oneminusc = 1.0f - c;
+        float xy = axis.x() * axis.y();
+        float yz = axis.y() * axis.z();
+        float xz = axis.x() * axis.z();
+        float xs = axis.x() * s;
+        float ys = axis.y() * s;
+        float zs = axis.z() * s;
+        float f00 = axis.x() * axis.x() * oneminusc + c;
+        float f2 = xy * oneminusc + zs;
+        float f3 = xz * oneminusc - ys;
+        float f4 = xy * oneminusc - zs;
+        float f5 = axis.y() * axis.y() * oneminusc + c;
+        float f6 = yz * oneminusc + xs;
+        float f7 = xz * oneminusc + ys;
+        float f8 = yz * oneminusc - xs;
+        float f9 = axis.z() * axis.z() * oneminusc + c;
+        float t00 = from.m00 * f00 + from.m10 * f2 + from.m20 * f3;
+        float t2 = from.m01 * f00 + from.m11 * f2 + from.m21 * f3;
+        float t3 = from.m02 * f00 + from.m12 * f2 + from.m22 * f3;
+        float t4 = from.m03 * f00 + from.m13 * f2 + from.m23 * f3;
+        float t5 = from.m00 * f4 + from.m10 * f5 + from.m20 * f6;
+        float t6 = from.m01 * f4 + from.m11 * f5 + from.m21 * f6;
+        float t7 = from.m02 * f4 + from.m12 * f5 + from.m22 * f6;
+        float t8 = from.m03 * f4 + from.m13 * f5 + from.m23 * f6;
         out.m20 = from.m00 * f7 + from.m10 * f8 + from.m20 * f9;
         out.m21 = from.m01 * f7 + from.m11 * f8 + from.m21 * f9;
         out.m22 = from.m02 * f7 + from.m12 * f8 + from.m22 * f9;
@@ -156,5 +161,117 @@ public class Mat4f {
         dest.m31 = (top + bottom) / (top - bottom);
         dest.m32 = (far + near) / (far - near);
         return dest;
+    }
+
+    public static Mat4f normalized01(Mat4f source, Mat4f dest){
+        if(dest == null){
+            dest = Mat4f.identity();
+        }
+        float min = source.m00;
+        float max = source.m01;
+        for(float f : source.getValues()){
+            if(f < min){
+                min = f;
+            }
+            if(f > max){
+                max = f;
+            }
+        }
+
+        dest.m00 = Mathf.normalize(source.m00, min, max);
+        dest.m01 = Mathf.normalize(source.m01, min, max);
+        dest.m02 = Mathf.normalize(source.m02, min, max);
+        dest.m03 = Mathf.normalize(source.m03, min, max);
+        dest.m10 = Mathf.normalize(source.m10, min, max);
+        dest.m11 = Mathf.normalize(source.m11, min, max);
+        dest.m12 = Mathf.normalize(source.m12, min, max);
+        dest.m13 = Mathf.normalize(source.m13, min, max);
+        dest.m20 = Mathf.normalize(source.m20, min, max);
+        dest.m21 = Mathf.normalize(source.m21, min, max);
+        dest.m22 = Mathf.normalize(source.m22, min, max);
+        dest.m23 = Mathf.normalize(source.m23, min, max);
+        dest.m30 = Mathf.normalize(source.m30, min, max);
+        dest.m31 = Mathf.normalize(source.m31, min, max);
+        dest.m32 = Mathf.normalize(source.m32, min, max);
+        dest.m33 = Mathf.normalize(source.m33, min, max);
+
+        return dest;
+    }
+
+    public static Mat4f invertOrthonormal(Mat4f source, Mat4f dest) {
+        if (dest == null) {
+            dest = Mat4f.identity();
+        }
+        float nm30 = -(source.m00 * source.m30 + source.m01 * source.m31 + source.m02 * source.m32);
+        float nm31 = -(source.m10 * source.m30 + source.m11 * source.m31 + source.m12 * source.m32);
+        float nm32 = -(source.m20 * source.m30 + source.m21 * source.m31 + source.m22 * source.m32);
+        dest.m00 = source.m00;
+        dest.m01 = source.m10;
+        dest.m02 = source.m20;
+        dest.m03 = 0.0f;
+        dest.m10 = source.m01;
+        dest.m11 = source.m11;
+        dest.m12 = source.m21;
+        dest.m13 = 0.0f;
+        dest.m20 = source. m02;
+        dest.m21 = source.m12;
+        dest.m22 = source.m22;
+        dest.m23 = 0.0f;
+        dest.m30 = nm30;
+        dest.m31 = nm31;
+        dest.m32 = nm32;
+        dest.m33 = 1.0f;
+        return dest;
+    }
+
+    public static Mat4f transpose(Mat4f source, Mat4f dest){
+        if (dest == null) {
+            dest = Mat4f.identity();
+        }
+        float nm00 = source.m00;
+        float nm01 = source.m10;
+        float nm02 = source.m20;
+        float nm03 = source.m30;
+        float nm10 = source.m01;
+        float nm11 = source.m11;
+        float nm12 = source.m21;
+        float nm13 = source.m31;
+        float nm20 = source.m02;
+        float nm21 = source.m12;
+        float nm22 = source.m22;
+        float nm23 = source.m32;
+        float nm30 = source.m03;
+        float nm31 = source.m13;
+        float nm32 = source.m23;
+        float nm33 = source.m33;
+        dest.m00 = nm00;
+        dest.m01 = nm01;
+        dest.m02 = nm02;
+        dest.m03 = nm03;
+        dest.m10 = nm10;
+        dest.m11 = nm11;
+        dest.m12 = nm12;
+        dest.m13 = nm13;
+        dest.m20 = nm20;
+        dest.m21 = nm21;
+        dest.m22 = nm22;
+        dest.m23 = nm23;
+        dest.m30 = nm30;
+        dest.m31 = nm31;
+        dest.m32 = nm32;
+        dest.m33 = nm33;
+        return dest;
+    }
+
+    public String toString(int size) {
+        return "|" + get(m00, size) + " " + get(m01, size) + " " + get(m02, size) + " " + get(m03, size) + "|\n"
+                + "|" + get(m10, size) + " " + get(m11, size) + " " + get(m12, size) + " " + get(m13, size) + "|\n"
+                + "|" + get(m20, size) + " " + get(m21, size) + " " + get(m22, size) + " " + get(m23, size) + "|\n"
+                + "|" + get(m30, size) + " " + get(m31, size) + " " + get(m32, size) + " " + get(m33, size) + "|";
+    }
+
+    private String get(float value, int size){
+        value = Mathf.round(value, size);
+        return StringUtil.capStringNumber(String.valueOf(value), size);
     }
 }

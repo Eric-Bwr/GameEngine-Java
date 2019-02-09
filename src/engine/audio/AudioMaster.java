@@ -20,14 +20,12 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class AudioMaster {
 
 	private static long device, context;
-
-	private static Mat4f cameraMatrix;
-
+	private static boolean init = false;
 	private static Vec3f listenerPosition, listenerVelocity;
-
 	public static List<AudioSource> audioSources = new ArrayList<>();
 
 	public static void init(Vec3f position, Vec3f velocity){
+		init = true;
 		device = alcOpenDevice((ByteBuffer) null);
 		if (device == NULL) {
 			Log.logError("Failed to open the default OpenAL device");
@@ -39,7 +37,6 @@ public class AudioMaster {
 		}
 		alcMakeContextCurrent(context);
 		AL.createCapabilities(deviceCaps);
-		cameraMatrix = new Mat4f();
 		setPosition(position);
 		setVelocity(velocity);
 	}
@@ -67,28 +64,14 @@ public class AudioMaster {
 		return listenerVelocity;
 	}
 
-	//TODO: Implement Matrix positiveZ and X
-	//public static void setCameraOrientation(Mat4f cameraMatrix){
-	//	Vec3f at = new Vec3f(0);
-	//	cameraMatrix.positiveZ(at).negate();
-	//	Vec3f up = new Vec3f(0);
-	//	cameraMatrix.positiveY(up);
-	//	float[] data = new float[6];
-	//	data[0] = at.x();
-	//	data[1] = at.y();
-	//	data[2] = at.z();
-	//	data[3] = up.x();
-	//	data[4] = up.y();
-	//	data[5] = up.z();
-	//	alListenerfv(AL_ORIENTATION, data);
-	//}
-
 	public static void cleanUpMemory(){
-		for(AudioSource audioSource : audioSources){
-			audioSource.cleanUpMemory();
+		if(init) {
+			for (AudioSource audioSource : audioSources) {
+				audioSource.cleanUpMemory();
+			}
+			alcDestroyContext(context);
+			alcCloseDevice(device);
+			audioSources.clear();
 		}
-		alcDestroyContext(context);
-		alcCloseDevice(device);
-		audioSources.clear();
 	}
 }

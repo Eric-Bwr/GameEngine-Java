@@ -76,4 +76,13 @@ public class Vec2f {
         this.x = x;
         return x;
     }
+
+    public boolean equals(Vec2f vec) {
+        return vec.x == x && vec.y == y;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("vec2[%s, %s]", x, y);
+    }
 }

@@ -2,6 +2,7 @@ package engine.model.camera;
 
 import engine.maths.Mat4f;
 import engine.maths.Vec3f;
+import engine.util.Log;
 
 public class CameraAxis {
 
@@ -60,6 +61,30 @@ public class CameraAxis {
 		float resultRotX = this.rotX - mouseDeltaY * sensitivity;
 		if(!(resultRotX > blockUp || resultRotX < blockDown))
 			this.rotX = resultRotX;
+	}
+
+	public float getRotX() {
+		return rotX;
+	}
+
+	public float getRotY() {
+		return rotY;
+	}
+
+	public float getRotZ() {
+		return rotZ;
+	}
+
+	public void setRotX(float rotX) {
+		this.rotX = rotX;
+	}
+
+	public void setRotY(float rotY) {
+		this.rotY = rotY;
+	}
+
+	public void setRotZ(float rotZ) {
+		this.rotZ = rotZ;
 	}
 
 	public Vec3f getPosition(){

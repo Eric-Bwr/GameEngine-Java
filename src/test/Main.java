@@ -9,18 +9,13 @@ import engine.callbacks.EngineCallback;
 import engine.callbacks.FocusCallback;
 import engine.callbacks.KeyCallback;
 import engine.callbacks.MouseCallback;
-import engine.graphics.Model;
+import engine.graphics.Light;
 import engine.graphics.Shader;
-import engine.graphics.Texture;
 import engine.maths.Mat4f;
 import engine.maths.Vec3f;
 import engine.model.ModelLoader;
 import engine.model.camera.CameraFPS;
-import engine.model.entity.Entity;
-import engine.util.Log;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.AL11;
 
 public class Main implements EngineCallback {
 
@@ -28,11 +23,11 @@ public class Main implements EngineCallback {
 	private static final float NEAR = 0.1f;
 	private static final float FAR = 1000;
 	private static final float SENSITIVITY = 0.1F;
-	private float moveSpeed = 0.2F;
+	private float moveSpeed = 0.3F;
 
 	private Shader shader;
-	private Entity entity;
-	private Model model;
+	private Terrain terrain;
+	//private Model model;
 	private ModelLoader modelLoader = new ModelLoader();
 
 	private KeyCallback kc;
@@ -41,13 +36,13 @@ public class Main implements EngineCallback {
 	private GameEngine gameEngine;
 	private AudioMaster audioMaster = new AudioMaster();
 	private EngineConfig config = new EngineConfig();
-	private CameraFPS camera = new CameraFPS(new Vec3f(0, 0, 0), 0, 0);
+	private CameraFPS camera;
 
 	public Main(){
 		config.title = "GameEngine";
 		config.width = 1000;
 		config.height = 700;
-		config.windowIconPath = "icon.png";
+		config.windowIconPath = "Textures/Icon.png";
 		config.rezisable = true;
 		config.vsync = false;
 		config.screenMode = ScreenMode.WINDOW;
@@ -68,38 +63,41 @@ public class Main implements EngineCallback {
 		gameEngine.applyCallback(fc);
 	}
 
+	private Light light;
 	private AudioSource audioSource;
 
 	@Override
 	public void init() {
-		audioMaster.init(new Vec3f(0, 0, 0), new Vec3f(0, 0, 0));
+/*		audioMaster.init(new Vec3f(0, 0, 0), new Vec3f(0, 0, 0));
 		audioMaster.setDistanceAttenuation(AL10.AL_INVERSE_DISTANCE);
 		audioSource = new AudioSource("Audio/Randomize20.ogg");
 		audioSource.setPosition(new Vec3f(0,0,0));
 		audioSource.setRollOffFactor(2);
 		audioSource.setReferenceDistance(6);
-		audioSource.setMaxDistance(50);
+		audioSource.setMaxDistance(30);
 		audioSource.setLooping(true);
 		audioSource.setRelative(true);
 		audioSource.setPitch(1.5f);
-		audioSource.play();
+		audioSource.setVolume(0.007F);
+		audioSource.play();*/
+		camera = new CameraFPS(new Vec3f(0, -50, 0), 0, 0);
 		shader = new Shader("Shaders/Basic.glsl");
-		Texture tex = new Texture("Textures/stallTexture.png");
-		model = modelLoader.loadModel("Objects/stall.obj", tex);
-		entity = new Entity(model, new Vec3f(0, 0, -25), 0, 0, 45, 1);
 		gameEngine.showMouse(false);
+		gameEngine.setMousePosition(config.width/2, config.height/2);
+		light = new Light(shader);
+		light.setPosition("lightPosition", new Vec3f(0, 50, -20));
+
+		terrain = new Terrain(100, 2);
 	}
 
 	boolean rot = true;
 
-
 	@Override
 	public void tick(float dt) {
-		audioMaster.setPosition(camera.getPosition());
-		audioMaster.setCameraOrientation(camera.getViewMatrix());
+/*		audioMaster.setPosition(camera.getPosition());
 		audioSource.setPosition(audioSource.getPosition().add(0.05f, 0, 0));
-		Log.log(audioSource.getPosition().x());
-		entity.setRotY(entity.getRotY() + 0.1F);
+		Log.log(audioSource.getPosition().x());*/
+		//entity.setRotY(entity.getRotY() + 0.1F);
 		if (kc.isKeyCode(GLFW.GLFW_KEY_ESCAPE)) {
 			if(rot){
 				rot = false;
@@ -134,20 +132,31 @@ public class Main implements EngineCallback {
 		if(rot)
 			camera.rotate(mouse.getDeltaX(), mouse.getDeltaY(), SENSITIVITY);
 		mouse.reset();
-		entity.bind();
+
+/*		//entity.bind();
+
 		shader.bind();
 		shader.setUniformMat4f("projectionMatrix", Mat4f.projection(FOV, 4, 4, NEAR, FAR, null));
 		shader.setUniformMat4f("viewMatrix", camera.getViewMatrix());
-		shader.setUniformMat4f("transformationMatrix", entity.getTransformationMatrix());
-		entity.draw();
+		//shader.setUniformMat4f("transformationMatrix", entity.getTransformationMatrix());
+		light.setColor("lightColor", new Vec4f(0.4F, 0.4F, 1.0F, 1.0F));
+		light.setBrightness("lightBrightness", 4F);
+		//entity.draw();
 		shader.unbind();
-		entity.unbind();
+		entity.unbind();*/
+
+		terrain.begin();
+		terrain.setViewMatrix(camera.getViewMatrix());
+		terrain.setProjectionMatrix(Mat4f.projection(FOV, 4, 4, NEAR, FAR, null));
+		terrain.render();
+		terrain.end();
 	}
 
 	@Override
 	public void terminate() {
 		shader.cleanUpMemory();
-		model.cleanUpMemory();
+		//model.cleanUpMemory();
+		terrain.cleanUp();
 	}
 
 	public static void main(String[] args){

@@ -118,4 +118,17 @@ public class Vec3f {
         float dz = this.z - z;
         return Mathf.sqrt(dx * dx + dy * dy + dz * dz);
     }
+
+    public boolean equals(Vec3f vec) {
+        return this.x == vec.x && this.y == vec.y && this.z == vec.z;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("vec3[%s, %s, %s]", x, y, z);
+    }
+
+    public Vec3f negate() {
+        return new Vec3f(-x, -y, -z);
+    }
 }
