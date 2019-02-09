@@ -10,5 +10,4 @@ public class Interpolation {
         float out = (1 - Mathf.cos(value * Mathf.PI)) / 2;
         return (min * (1 - out) + max * out);
     }
-
 }

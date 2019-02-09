@@ -3,6 +3,8 @@ package test;
 import engine.EngineConfig;
 import engine.GameEngine;
 import engine.ScreenMode;
+import engine.audio.AudioMaster;
+import engine.audio.AudioSource;
 import engine.callbacks.EngineCallback;
 import engine.callbacks.FocusCallback;
 import engine.callbacks.KeyCallback;
@@ -17,6 +19,8 @@ import engine.model.camera.CameraFPS;
 import engine.model.entity.Entity;
 import engine.util.Log;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL11;
 
 public class Main implements EngineCallback {
 
@@ -35,6 +39,7 @@ public class Main implements EngineCallback {
 	private FocusCallback fc;
 	private MouseCallback mouse;
 	private GameEngine gameEngine;
+	private AudioMaster audioMaster = new AudioMaster();
 	private EngineConfig config = new EngineConfig();
 	private CameraFPS camera = new CameraFPS(new Vec3f(0, 0, 0), 0, 0);
 
@@ -42,7 +47,7 @@ public class Main implements EngineCallback {
 		config.title = "GameEngine";
 		config.width = 1000;
 		config.height = 700;
-		config.windowIconPath = "dog.png";
+		config.windowIconPath = "icon.png";
 		config.rezisable = true;
 		config.vsync = false;
 		config.screenMode = ScreenMode.WINDOW;
@@ -63,8 +68,21 @@ public class Main implements EngineCallback {
 		gameEngine.applyCallback(fc);
 	}
 
+	private AudioSource audioSource;
+
 	@Override
 	public void init() {
+		audioMaster.init(new Vec3f(0, 0, 0), new Vec3f(0, 0, 0));
+		audioMaster.setDistanceAttenuation(AL10.AL_INVERSE_DISTANCE);
+		audioSource = new AudioSource("Audio/Randomize20.ogg");
+		audioSource.setPosition(new Vec3f(0,0,0));
+		audioSource.setRollOffFactor(2);
+		audioSource.setReferenceDistance(6);
+		audioSource.setMaxDistance(50);
+		audioSource.setLooping(true);
+		audioSource.setRelative(true);
+		audioSource.setPitch(1.5f);
+		audioSource.play();
 		shader = new Shader("Shaders/Basic.glsl");
 		Texture tex = new Texture("Textures/stallTexture.png");
 		model = modelLoader.loadModel("Objects/stall.obj", tex);
@@ -74,16 +92,22 @@ public class Main implements EngineCallback {
 
 	boolean rot = true;
 
+
 	@Override
 	public void tick(float dt) {
+		audioMaster.setPosition(camera.getPosition());
+		audioMaster.setCameraOrientation(camera.getViewMatrix());
+		audioSource.setPosition(audioSource.getPosition().add(0.05f, 0, 0));
+		Log.log(audioSource.getPosition().x());
 		entity.setRotY(entity.getRotY() + 0.1F);
 		if (kc.isKeyCode(GLFW.GLFW_KEY_ESCAPE)) {
 			if(rot){
 				rot = false;
-				gameEngine.showMouse(true);}
-			else{
+				gameEngine.showMouse(true);
+			} else {
 				rot = true;
-			    gameEngine.showMouse(false);}
+			    gameEngine.showMouse(false);
+			}
 		}
 		if(kc.isKeyCode(GLFW.GLFW_KEY_W)){
 			camera.moveForward(moveSpeed);

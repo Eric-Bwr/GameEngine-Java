@@ -6,8 +6,8 @@ import engine.maths.Vec3f;
 
 public class Entity {
 
-	private Model model = null;
-	private Vec3f position = null;
+	private Model model;
+	private Vec3f position;
 	private float rotX, rotY, rotZ;
 	private float scale;
 
