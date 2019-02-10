@@ -97,7 +97,7 @@ public class Main implements EngineCallback {
 		gameEngine.setMousePosition(config.width/2, config.height/2);
 		light = new Light(shader);
 
-		terrain = new Terrain(500, 2);
+		terrain = new Terrain();
 
 		Texture texture = new Texture("Textures/stallTexture.png");
 		Model model = modelLoader.loadModel("Objects/Stall.obj", texture);

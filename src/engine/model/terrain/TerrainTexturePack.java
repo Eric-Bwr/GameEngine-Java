@@ -2,13 +2,13 @@ package engine.model.terrain;
 
 public class TerrainTexturePack {
 
-	private TerrainTexture groundTexture;
-	private TerrainTexture rTexture;
-	private TerrainTexture gTexture;
-	private TerrainTexture bTexture;
-	private TerrainTexture blendTexture;
+	private int groundTexture;
+	private int rTexture;
+	private int gTexture;
+	private int bTexture;
+	private int blendTexture;
 
-	public TerrainTexturePack(TerrainTexture groundTexture, TerrainTexture rTexture, TerrainTexture gTexture, TerrainTexture bTexture, TerrainTexture blendTexture) {
+	public TerrainTexturePack(int groundTexture, int rTexture, int gTexture, int bTexture, int blendTexture) {
 		this.groundTexture = groundTexture;
 		this.rTexture = rTexture;
 		this.gTexture = gTexture;
@@ -16,43 +16,43 @@ public class TerrainTexturePack {
 		this.blendTexture = blendTexture;
 	}
 
-	public void setGroundTexture(TerrainTexture groundTexture) {
+	public void setGroundTexture(int groundTexture) {
 		this.groundTexture = groundTexture;
 	}
 
-	public void setrTexture(TerrainTexture rTexture) {
+	public void setrTexture(int rTexture) {
 		this.rTexture = rTexture;
 	}
 
-	public void setgTexture(TerrainTexture gTexture) {
+	public void setgTexture(int gTexture) {
 		this.gTexture = gTexture;
 	}
 
-	public void setbTexture(TerrainTexture bTexture) {
+	public void setbTexture(int bTexture) {
 		this.bTexture = bTexture;
 	}
 
-	public void setBlendTexture(TerrainTexture blendTexture) {
+	public void setBlendTexture(int blendTexture) {
 		this.blendTexture = blendTexture;
 	}
 
-	public TerrainTexture getGroundTexture() {
+	public int getGroundTexture() {
 		return groundTexture;
 	}
 
-	public TerrainTexture getrTexture() {
+	public int getrTexture() {
 		return rTexture;
 	}
 
-	public TerrainTexture getgTexture() {
+	public int getgTexture() {
 		return gTexture;
 	}
 
-	public TerrainTexture getbTexture() {
+	public int getbTexture() {
 		return bTexture;
 	}
 
-	public TerrainTexture getBlendTexture() {
+	public int getBlendTexture() {
 		return blendTexture;
 	}
 }

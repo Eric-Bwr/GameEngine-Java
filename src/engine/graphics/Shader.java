@@ -87,12 +87,6 @@ public class Shader {
 		glUseProgram(0);
 	}
 
-	public void cleanUpMemory(){
-		glDetachShader(id, vertID);
-		glDetachShader(id, fragID);
-		glDeleteProgram(id);
-	}
-
 	public int getUniform(String name){
 		if(locations.containsKey(name)){
 		    return locations.get(name);
@@ -125,4 +119,10 @@ public class Shader {
 	public void setUniform3f(String name, Vec3f vector){ glUniform3f(getUniform(name), vector.x(), vector.y(), vector.z()); }
 
 	public void setUniform4f(String name, Vec4f vec){ glUniform4f(getUniform(name), vec.x(), vec.y(), vec.z(), vec.w()); }
+
+	public void cleanUpMemory(){
+		glDetachShader(id, vertID);
+		glDetachShader(id, fragID);
+		glDeleteProgram(id);
+	}
 }

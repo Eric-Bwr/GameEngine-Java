@@ -7,16 +7,18 @@ import engine.maths.Mat4f;
 import engine.maths.Vec3f;
 import engine.model.entity.Entity;
 import engine.model.terrain.TerrainGenerator;
+import engine.model.terrain.TerrainTexturePack;
 
 public class Terrain {
 
     private Shader shader;
     private Model model;
     private Entity entity;
+    private TerrainTexturePack texturePack;
 
     private float rot;
 
-    public Terrain(float size, int detailed){
+    public Terrain(){
         shader = new Shader("Shaders/Terrain.glsl");
         Texture texture = new Texture("Textures/grass.png");
         TerrainGenerator terrainGenerator = new TerrainGenerator();
