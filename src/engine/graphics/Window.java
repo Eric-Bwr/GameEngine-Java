@@ -68,6 +68,8 @@ public class Window {
 			mc.setSize(config.width, config.height);
 		}
 		GL.createCapabilities();
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
 		glEnable(GL_DEPTH_TEST);
 		initCallbacks();
 		setIcon();
@@ -79,7 +81,6 @@ public class Window {
 	}
 
 	public void setIcon() {
-		Log.log(config.windowIconPath);
 		if(!(config.windowIconPath.equals(""))) {
 			ByteBuffer icon16;
 			ByteBuffer icon32;

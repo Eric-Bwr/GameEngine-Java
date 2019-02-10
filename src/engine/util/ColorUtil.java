@@ -11,5 +11,4 @@ public class ColorUtil {
         float alpha = color >> 24 & 255;
         return new Vec4f(red, green, blue, alpha);
     }
-
 }

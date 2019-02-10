@@ -33,27 +33,27 @@ public class CameraAxis {
 	}
 
 	public void moveForward(float speed){
-		this.position.add(new Vec3f(0.0F, 0.0F, speed));
-	}
-
-	public void moveBackwards(float speed){
 		this.position.add(new Vec3f(0.0F, 0.0F, -speed));
 	}
 
-	public void moveRight(float speed){
-		this.position.add(new Vec3f(-speed, 0.0F, 0.0F));
+	public void moveBackwards(float speed){
+		this.position.add(new Vec3f(0.0F, 0.0F, speed));
 	}
 
-	public void moveLeft(float speed){
+	public void moveRight(float speed){
 		this.position.add(new Vec3f(speed, 0.0F, 0.0F));
 	}
 
+	public void moveLeft(float speed){
+		this.position.add(new Vec3f(-speed, 0.0F, 0.0F));
+	}
+
 	public void moveUp(float speed){
-		this.position.add(new Vec3f(0.0F, -speed, 0.0F));
+		this.position.add(new Vec3f(0.0F, speed, 0.0F));
 	}
 
 	public void moveDown(float speed){
-		this.position.add(new Vec3f(0.0F, speed, 0.0F));
+		this.position.add(new Vec3f(0.0F, -speed, 0.0F));
 	}
 
 	public void rotate(float mouseDeltaX, float mouseDeltaY, float sensitivity){
@@ -100,7 +100,7 @@ public class CameraAxis {
 		Mat4f.rotation(rotX, new Vec3f(1, 0, 0), view, view);
 		Mat4f.rotation(rotY, new Vec3f(0, 1, 0), view, view);
 		Mat4f.rotation(rotZ, new Vec3f(0, 0, 1), view, view);
-		Mat4f.translate(position, view, view);
+		Mat4f.translate(position.negate(), view, view);
 		return view;
 	}
 }

@@ -6,7 +6,7 @@ import engine.graphics.Texture;
 import engine.maths.Mat4f;
 import engine.maths.Vec3f;
 import engine.model.entity.Entity;
-import engine.terrain.TerrainGenerator;
+import engine.model.terrain.TerrainGenerator;
 
 public class Terrain {
 
@@ -18,10 +18,11 @@ public class Terrain {
 
     public Terrain(float size, int detailed){
         shader = new Shader("Shaders/Terrain.glsl");
-        Texture texture = new Texture("Textures/highGrass.png");
-
-        model = TerrainGenerator.generateTerrain(texture, size, detailed);
-        entity = new Entity(model, new Vec3f(0, 0, 0), 0, 0,0, 1);
+        Texture texture = new Texture("Textures/grass.png");
+        TerrainGenerator terrainGenerator = new TerrainGenerator();
+        model = terrainGenerator.generateTerrain(texture, "Textures/heightmap.png", 80, 500);
+        //model = terrainGenerator.generateTerrain(texture, 50, 500, new HeightsGenerator(70, 3, 0.3f));
+        entity = new Entity(model, new Vec3f(0, 0, 0), 0, 0, 0, 1);
     }
 
     public void begin(){

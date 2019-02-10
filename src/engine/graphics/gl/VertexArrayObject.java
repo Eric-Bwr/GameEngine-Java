@@ -9,6 +9,7 @@ public class VertexArrayObject {
     private VertexBufferObject position;
     private VertexBufferObject texCoords;
     private VertexBufferObject normals;
+
     private int vertexCount;
 
     private boolean simple;

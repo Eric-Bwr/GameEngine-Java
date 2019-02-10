@@ -149,6 +149,31 @@ public class Mat4f {
         return dest;
     }
 
+    public static Mat4f lookAt(Vec3f camPos, Vec3f entityPos, Vec3f up, Mat4f dest){
+        if(dest == null){
+            dest = Mat4f.identity();
+        }
+        Vec3f a = entityPos.sub(camPos).normalize();
+        Vec3f b = a.cross(up.normalize());
+        Vec3f c = b.cross(a);
+
+        dest.m00 = b.x();
+        dest.m01 = b.y();
+        dest.m02 = b.z();
+
+        dest.m10 = c.x();
+        dest.m11 = c.y();
+        dest.m12 = c.z();
+
+        dest.m20 = -a.x();
+        dest.m21 = -a.y();
+        dest.m22 = -a.z();
+
+        dest = mul(dest, translate(camPos, dest, dest), dest);
+
+        return dest;
+    }
+
     public static Mat4f orthographic(float left, float right, float bottom, float top, float near, float far, Mat4f dest){
         if(dest == null){
             dest = Mat4f.identity();
@@ -260,6 +285,50 @@ public class Mat4f {
         dest.m31 = nm31;
         dest.m32 = nm32;
         dest.m33 = nm33;
+        return dest;
+    }
+
+
+
+    public static Mat4f mul(Mat4f one, Mat4f two, Mat4f dest) {
+        if (dest == null){
+            dest = Mat4f.identity();
+        }
+
+        float m00 = one.m00 * two.m00 + one.m10 * two.m01 + one.m20 * two.m02 + one.m30 * two.m03;
+        float m01 = one.m01 * two.m00 + one.m11 * two.m01 + one.m21 * two.m02 + one.m31 * two.m03;
+        float m02 = one.m02 * two.m00 + one.m12 * two.m01 + one.m22 * two.m02 + one.m32 * two.m03;
+        float m03 = one.m03 * two.m00 + one.m13 * two.m01 + one.m23 * two.m02 + one.m33 * two.m03;
+        float m10 = one.m00 * two.m10 + one.m10 * two.m11 + one.m20 * two.m12 + one.m30 * two.m13;
+        float m11 = one.m01 * two.m10 + one.m11 * two.m11 + one.m21 * two.m12 + one.m31 * two.m13;
+        float m12 = one.m02 * two.m10 + one.m12 * two.m11 + one.m22 * two.m12 + one.m32 * two.m13;
+        float m13 = one.m03 * two.m10 + one.m13 * two.m11 + one.m23 * two.m12 + one.m33 * two.m13;
+        float m20 = one.m00 * two.m20 + one.m10 * two.m21 + one.m20 * two.m22 + one.m30 * two.m23;
+        float m21 = one.m01 * two.m20 + one.m11 * two.m21 + one.m21 * two.m22 + one.m31 * two.m23;
+        float m22 = one.m02 * two.m20 + one.m12 * two.m21 + one.m22 * two.m22 + one.m32 * two.m23;
+        float m23 = one.m03 * two.m20 + one.m13 * two.m21 + one.m23 * two.m22 + one.m33 * two.m23;
+        float m30 = one.m00 * two.m30 + one.m10 * two.m31 + one.m20 * two.m32 + one.m30 * two.m33;
+        float m31 = one.m01 * two.m30 + one.m11 * two.m31 + one.m21 * two.m32 + one.m31 * two.m33;
+        float m32 = one.m02 * two.m30 + one.m12 * two.m31 + one.m22 * two.m32 + one.m32 * two.m33;
+        float m33 = one.m03 * two.m30 + one.m13 * two.m31 + one.m23 * two.m32 + one.m33 * two.m33;
+
+        dest.m00 = m00;
+        dest.m01 = m01;
+        dest.m02 = m02;
+        dest.m03 = m03;
+        dest.m10 = m10;
+        dest.m11 = m11;
+        dest.m12 = m12;
+        dest.m13 = m13;
+        dest.m20 = m20;
+        dest.m21 = m21;
+        dest.m22 = m22;
+        dest.m23 = m23;
+        dest.m30 = m30;
+        dest.m31 = m31;
+        dest.m32 = m32;
+        dest.m33 = m33;
+
         return dest;
     }
 

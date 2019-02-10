@@ -35,33 +35,33 @@ public class CameraFPS {
 	}
 
 	public void moveForward(float speed) {
-		position.x(position.x() - speed * sin(rotY));
-		position.z(position.z() + speed * cos(rotY));
-		position.y(position.y() - -sin(rotX) * speed);
-	}
-
-	public void moveBackwards(float speed) {
 		position.x(position.x() + speed * sin(rotY));
 		position.z(position.z() - speed * cos(rotY));
 		position.y(position.y() + -sin(rotX) * speed);
 	}
 
+	public void moveBackwards(float speed) {
+		position.x(position.x() - speed * sin(rotY));
+		position.z(position.z() + speed * cos(rotY));
+		position.y(position.y() - -sin(rotX) * speed);
+	}
+
 	public void moveRight(float speed){
-		position.x(position.x() - speed * sin(rotY + 90));
-		position.z(position.z() + speed * cos(rotY + 90));
+		position.x(position.x() + speed * sin(rotY + 90));
+		position.z(position.z() - speed * cos(rotY + 90));
 	}
 
 	public void moveLeft(float speed){
-		position.x(position.x() - speed * sin(rotY - 90));
-		position.z(position.z() + speed * cos(rotY - 90));
+		position.x(position.x() + speed * sin(rotY - 90));
+		position.z(position.z() - speed * cos(rotY - 90));
 	}
 
 	public void moveUp(float speed){
-		this.position.add(new Vec3f(0.0F, -speed, 0.0F));
+		this.position.add(new Vec3f(0.0F, speed, 0.0F));
 	}
 
 	public void moveDown(float speed){
-		this.position.add(new Vec3f(0.0F, speed, 0.0F));
+		this.position.add(new Vec3f(0.0F, -speed, 0.0F));
 	}
 
 	public void rotate(float mouseDeltaX, float mouseDeltaY, float sensitivity){
@@ -72,18 +72,18 @@ public class CameraFPS {
 	}
 
 	public Vec3f getPosition(){
-		return position.negate();
+		return position;
 	}
 
 	public void setPosition(Vec3f position) {
-		this.position = position.negate();
+		this.position = position;
 	}
 
 	public Mat4f getViewMatrix(){
 		Mat4f view = Mat4f.identity();
 		Mat4f.rotation(rotX, new Vec3f(1, 0, 0), view, view);
 		Mat4f.rotation(rotY, new Vec3f(0, 1, 0), view, view);
-		Mat4f.translate(position, view, view);
+		Mat4f.translate(position.negate(), view, view);
 		return view;
 	}
 }

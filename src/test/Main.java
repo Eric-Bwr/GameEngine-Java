@@ -10,11 +10,17 @@ import engine.callbacks.FocusCallback;
 import engine.callbacks.KeyCallback;
 import engine.callbacks.MouseCallback;
 import engine.graphics.Light;
+import engine.graphics.Model;
 import engine.graphics.Shader;
+import engine.graphics.Texture;
+import engine.graphics.gl.shadow.ShadowDepthBuffer;
+import engine.graphics.gl.shadow.ShadowRenderer;
 import engine.maths.Mat4f;
 import engine.maths.Vec3f;
+import engine.maths.Vec4f;
 import engine.model.ModelLoader;
 import engine.model.camera.CameraFPS;
+import engine.model.entity.Entity;
 import org.lwjgl.glfw.GLFW;
 
 public class Main implements EngineCallback {
@@ -23,7 +29,10 @@ public class Main implements EngineCallback {
 	private static final float NEAR = 0.1f;
 	private static final float FAR = 1000;
 	private static final float SENSITIVITY = 0.1F;
-	private float moveSpeed = 0.3F;
+	private float moveSpeed = 0.6F;
+
+	private ShadowRenderer shadowRenderer;
+	private ShadowDepthBuffer shadowDepthBuffer;
 
 	private Shader shader;
 	private Terrain terrain;
@@ -38,6 +47,8 @@ public class Main implements EngineCallback {
 	private EngineConfig config = new EngineConfig();
 	private CameraFPS camera;
 
+	private Entity entity;
+	
 	public Main(){
 		config.title = "GameEngine";
 		config.width = 1000;
@@ -80,14 +91,20 @@ public class Main implements EngineCallback {
 		audioSource.setPitch(1.5f);
 		audioSource.setVolume(0.007F);
 		audioSource.play();*/
-		camera = new CameraFPS(new Vec3f(0, -50, 0), 0, 0);
+		camera = new CameraFPS(new Vec3f(0, 50, 20), 0f, 0f);
 		shader = new Shader("Shaders/Basic.glsl");
 		gameEngine.showMouse(false);
 		gameEngine.setMousePosition(config.width/2, config.height/2);
 		light = new Light(shader);
-		light.setPosition("lightPosition", new Vec3f(0, 50, -20));
 
-		terrain = new Terrain(100, 2);
+		terrain = new Terrain(500, 2);
+
+		Texture texture = new Texture("Textures/stallTexture.png");
+		Model model = modelLoader.loadModel("Objects/Stall.obj", texture);
+		entity = new Entity(model, new Vec3f(40, 0, 40), 0, 0, 0, 2);
+
+		//shadowRenderer = new ShadowRenderer();
+		//shadowDepthBuffer = new ShadowDepthBuffer(config.width, config.height);
 	}
 
 	boolean rot = true;
@@ -97,7 +114,6 @@ public class Main implements EngineCallback {
 /*		audioMaster.setPosition(camera.getPosition());
 		audioSource.setPosition(audioSource.getPosition().add(0.05f, 0, 0));
 		Log.log(audioSource.getPosition().x());*/
-		//entity.setRotY(entity.getRotY() + 0.1F);
 		if (kc.isKeyCode(GLFW.GLFW_KEY_ESCAPE)) {
 			if(rot){
 				rot = false;
@@ -127,35 +143,43 @@ public class Main implements EngineCallback {
 		}
 	}
 
+
 	@Override
 	public void render() {
 		if(rot)
 			camera.rotate(mouse.getDeltaX(), mouse.getDeltaY(), SENSITIVITY);
 		mouse.reset();
 
-/*		//entity.bind();
-
+		//shadowRenderer.bind();
+		//shadowDepthBuffer.bind();
+		entity.bind();
 		shader.bind();
+		light.setPosition("lightPosition", new Vec3f(40.0F, 10.0F, 40.0F));
+		light.setBrightness("lightBrightness", 3F);
+		light.setColor("lightColor", new Vec4f(1.0F, 1.0F, 1.0F, 1.0F));
 		shader.setUniformMat4f("projectionMatrix", Mat4f.projection(FOV, 4, 4, NEAR, FAR, null));
 		shader.setUniformMat4f("viewMatrix", camera.getViewMatrix());
-		//shader.setUniformMat4f("transformationMatrix", entity.getTransformationMatrix());
-		light.setColor("lightColor", new Vec4f(0.4F, 0.4F, 1.0F, 1.0F));
-		light.setBrightness("lightBrightness", 4F);
-		//entity.draw();
+		shader.setUniformMat4f("transformationMatrix", entity.getTransformationMatrix());
+		entity.draw();
+		//shadowRenderer.drawEntityWithShadow(entity, 1.0F, 7.5F);
 		shader.unbind();
-		entity.unbind();*/
+		entity.unbind();
 
 		terrain.begin();
 		terrain.setViewMatrix(camera.getViewMatrix());
 		terrain.setProjectionMatrix(Mat4f.projection(FOV, 4, 4, NEAR, FAR, null));
 		terrain.render();
 		terrain.end();
+		//shadowDepthBuffer.unbind();
+		//shadowRenderer.unbind();
+
+
 	}
 
 	@Override
 	public void terminate() {
 		shader.cleanUpMemory();
-		//model.cleanUpMemory();
+		entity.cleanUpMemory();
 		terrain.cleanUp();
 	}
 
