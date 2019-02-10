@@ -54,7 +54,7 @@ public class TerrainGenerator {
 				indices[pointer++] = bottomRight;
 			}
 		}
-		return new Model(texture, vertices, textureCoords, normals, indices);
+		return new Model(texture.getTextureId(), vertices, textureCoords, normals, indices, false);
 	}
 
 	public Model generateTerrain(Texture texture, String heightMap, float maxHeight, float size) {
@@ -104,7 +104,7 @@ public class TerrainGenerator {
 				indices[pointer++] = bottomRight;
 			}
 		}
-		return new Model(texture, vertices, textureCoords, normals, indices);
+		return new Model(texture.getTextureId(), vertices, textureCoords, normals, indices, false);
 	}
 
 	private Vec3f calculateNormal(int x, int z, BufferedImage image) {

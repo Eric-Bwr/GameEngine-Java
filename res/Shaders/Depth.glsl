@@ -2,17 +2,12 @@
 #version 330 core
 
 layout (location = 0) in vec4 position;
-layout (location = 1) in vec2 textureCoords;
-layout (location = 2) in vec3 normals;
+layout (location = 0) in vec2 textureCoords;
 
 out vec2 outTextureCoords;
 
-uniform mat4 lightSpaceMatrix;
-uniform mat4 model = mat4(1.0);
-
 void main() {
-    gl_Position = lightSpaceMatrix * model * position;
-
+    gl_Position = position;
     outTextureCoords = textureCoords;
 }
 
@@ -23,9 +18,9 @@ in vec2 outTextureCoords;
 
 out vec4 color;
 
-uniform sampler2D depthMap;
+uniform sampler2D texSampler;
 
 void main() {
-    float depthValue = texture(depthMap, outTextureCoords).r;
-    color = vec4(vec3(depthValue), 1.0);
+    vec4 texColor = texture(texSampler, outTextureCoords);
+    color = texColor;
 }

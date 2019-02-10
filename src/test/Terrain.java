@@ -6,6 +6,7 @@ import engine.graphics.Texture;
 import engine.maths.Mat4f;
 import engine.maths.Vec3f;
 import engine.model.entity.Entity;
+import engine.model.terrain.HeightsGenerator;
 import engine.model.terrain.TerrainGenerator;
 
 public class Terrain {
@@ -20,8 +21,8 @@ public class Terrain {
         shader = new Shader("Shaders/Terrain.glsl");
         Texture texture = new Texture("Textures/grass.png");
         TerrainGenerator terrainGenerator = new TerrainGenerator();
-        model = terrainGenerator.generateTerrain(texture, "Textures/heightmap.png", 80, 500);
-        //model = terrainGenerator.generateTerrain(texture, 50, 500, new HeightsGenerator(70, 3, 0.3f));
+        //model = terrainGenerator.generateTerrain(texture, "Textures/heightmap.png", 80, 500);
+        model = terrainGenerator.generateTerrain(texture, 100, 500, new HeightsGenerator(50, 4, 0F));
         entity = new Entity(model, new Vec3f(0, 0, 0), 0, 0, 0, 1);
     }
 
