@@ -23,7 +23,6 @@ import engine.model.terrain.Terrain;
 import engine.model.camera.CameraFPS;
 import engine.model.entity.Entity;
 import engine.model.terrain.TerrainSettings;
-import engine.util.Log;
 import org.lwjgl.glfw.GLFW;
 
 public class Main implements EngineCallback {
@@ -32,7 +31,7 @@ public class Main implements EngineCallback {
 	private static final float NEAR = 0.1f;
 	private static final float FAR = 1000;
 	private static final float SENSITIVITY = 0.1F;
-	private float moveSpeed = 0.6F;
+	private float moveSpeed = 1F;
 
 	private ShadowRenderer shadowRenderer;
 	private ShadowDepthBuffer shadowDepthBuffer;

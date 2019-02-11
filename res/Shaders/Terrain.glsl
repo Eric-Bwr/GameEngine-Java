@@ -1,5 +1,5 @@
 #shader vertex
-#version 330 core
+#version 400 core
 
 layout (location = 0) in vec4 position;
 layout (location = 1) in vec2 textCoord;
@@ -18,7 +18,7 @@ void main() {
 }
 
 #shader fragment
-#version 330 core
+#version 400 core
 
 in vec2 outTextCoord;
 
@@ -31,12 +31,14 @@ uniform sampler2D otherTexture;
 void main() {
     vec4 blendMapColor = texture(blendMap, outTextCoord);
     //TRYING TO GET FUCKIN DEFAULT BLENDMAP BACKGROUND (BLACK)
-    float backTextureAmount = 1 - (blendMapColor.r);
-    vec2 tiledCoords = outTextCoord;
+    float backTextureAmount = 1 - (blendMapColor.r + blendMapColor.g + blendMapColor.b);
+    //FIXME!!!!!!!!!!!!!!!!INTERESTING!!!!!!!!!!   Try to * tiledCoords by 40    !!!!!!!!!!!!!!!
+    vec2 tiledCoords = outTextCoord; //TILING:* 40.0;
     //SHOULD BE BLACK SO THE TERRAIN SHOULD BE TEXTURED IN GRASS
     vec4 groundTextureColor = texture(groundTexture, tiledCoords) * backTextureAmount;
     //JUST GETTING THE RED PIECE OF SHIT AKA. COLOR (TRYING)
     vec4 otherTextureColor = texture(otherTexture, tiledCoords) * blendMapColor.r;
+
     vec4 totalColor = groundTextureColor + otherTextureColor;
 
     //OLD PIECE OF TEXTURE CALCULATION CODE

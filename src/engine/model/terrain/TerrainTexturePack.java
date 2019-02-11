@@ -41,7 +41,7 @@ public class TerrainTexturePack {
 		connectTextureUnits();
 	}
 
-	private void connectTextureUnits(){
+	private void connectTextureUnits() {
 		if(blendTexture != null)
 			shader.setUniform1i(locationBlendMap, 0);
 		if(!otherTerrainTexturesLocations.isEmpty()){
@@ -61,8 +61,9 @@ public class TerrainTexturePack {
 				glBindTexture(GL_TEXTURE_2D, id);
 				current++;
 			}
+			//TODO: SHADER BUG COULD OCCUR THROUGH THIS
+			glActiveTexture(GL_TEXTURE0);
 		}
-		glActiveTexture(GL_TEXTURE0);
 	}
 
 	public Shader getShader() {
@@ -138,7 +139,6 @@ public class TerrainTexturePack {
 			glDeleteTextures(blendTexture);
 		if(!otherTerrainTexturesLocations.isEmpty()) {
 			for (Texture texture : otherTerrainTextures.keySet() ) {
-				if(texture == null) Log.log("Texture in TPack is null");
 				texture.cleanUpMemory();
 			}
 		}
