@@ -79,7 +79,7 @@ public class ModelLoader {
             indicesArray[i] = indices.get(i);
         }
 
-        return new Model(modelTexture, verticesArray, textureArray, normalsArray, indicesArray);
+        return new Model(modelTexture.getTextureId(), verticesArray, textureArray, normalsArray, indicesArray, false);
     }
 
     private void processVertex(String[] vertexData, List<Integer> indices,

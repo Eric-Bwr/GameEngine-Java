@@ -6,13 +6,13 @@ import static org.lwjgl.opengl.GL13.*;
 
 public class Model  {
 
-    private Texture texture;
+    private int texture;
     private VertexArrayObject vao;
     //TODO: Grass/Transparency could cause problems
     private boolean transparent, useFakeLighting;
 
-    public Model(Texture texture, float[] vpos, float[] texCoords, float[] normals, int[] indices) {
-        vao = new VertexArrayObject(vpos, texCoords, normals, indices, false);
+    public Model(int texture, float[] vpos, float[] texCoords, float[] normals, int[] indices, boolean simple) {
+        vao = new VertexArrayObject(vpos, texCoords, normals, indices, simple);
         this.texture = texture;
     }
 
@@ -21,7 +21,7 @@ public class Model  {
             glDisable(GL_CULL_FACE);
         }
         glActiveTexture(GL_TEXTURE0);
-        texture.bind();
+        glBindTexture(GL_TEXTURE_2D, texture);
         vao.bind();
     }
 
@@ -43,7 +43,7 @@ public class Model  {
 
     public void cleanUpMemory(){
         vao.cleanUpMemory();
-        texture.cleanUpMemory();
+        glDeleteTextures(texture);
     }
 
     public void setTransparent(boolean transparent) {

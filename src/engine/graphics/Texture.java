@@ -46,6 +46,10 @@ public class Texture {
         glBindTexture(GL_TEXTURE_2D, id);
     }
 
+    public int getTextureId() {
+        return id;
+    }
+
     public void cleanUpMemory() {
         glDeleteTextures(id);
     }

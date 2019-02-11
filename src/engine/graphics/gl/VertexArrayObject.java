@@ -19,8 +19,8 @@ public class VertexArrayObject {
         glBindVertexArray(id);
         this.indices = new IndicesBufferObject(indices);
         this.position = new VertexBufferObject(0, vpos, 3);
+        this.texCoords = new VertexBufferObject(1, texCoords, 2);
         if(!simple){
-            this.texCoords = new VertexBufferObject(1, texCoords, 2);
             this.normals = new VertexBufferObject(2, normals, 3);
         }
         glBindVertexArray(0);
@@ -32,8 +32,8 @@ public class VertexArrayObject {
         glBindVertexArray(id);
         indices.bind();
         position.bind();
+        texCoords.bind();
         if(!simple){
-            texCoords.bind();
             normals.bind();
         }
     }
@@ -41,9 +41,13 @@ public class VertexArrayObject {
     public void draw(){
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
-        glEnableVertexAttribArray(2);
+        if(!simple){
+            glEnableVertexAttribArray(2);
+        }
         glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
-        glDisableVertexAttribArray(2);
+        if(!simple){
+            glDisableVertexAttribArray(2);
+        }
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(0);
     }
@@ -51,9 +55,9 @@ public class VertexArrayObject {
     public void unbind(){
         indices.unbind();
         position.unbind();
+        texCoords.unbind();
         if(!simple){
             normals.unbind();
-            texCoords.unbind();
         }
         glBindVertexArray(0);
     }
@@ -67,8 +71,8 @@ public class VertexArrayObject {
     public void cleanUpMemory(){
         indices.cleanUpMemory();
         position.cleanUpMemory();
+        texCoords.cleanUpMemory();
         if(!simple){
-            texCoords.cleanUpMemory();
             normals.cleanUpMemory();
         }
         unbind();
