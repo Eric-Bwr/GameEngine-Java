@@ -25,18 +25,22 @@ in vec2 outTextCoord;
 out vec4 color;
 
 uniform sampler2D blendMap;
-uniform sampler2D otherTexture;
 uniform sampler2D groundTexture;
+uniform sampler2D otherTexture;
 
 void main() {
     vec4 blendMapColor = texture(blendMap, outTextCoord);
+    //TRYING TO GET FUCKIN DEFAULT BLENDMAP BACKGROUND (BLACK)
     float backTextureAmount = 1 - (blendMapColor.r);
-    vec2 tiledCoords = outTextCoord * 40.0;
+    vec2 tiledCoords = outTextCoord;
+    //SHOULD BE BLACK SO THE TERRAIN SHOULD BE TEXTURED IN GRASS
     vec4 groundTextureColor = texture(groundTexture, tiledCoords) * backTextureAmount;
+    //JUST GETTING THE RED PIECE OF SHIT AKA. COLOR (TRYING)
     vec4 otherTextureColor = texture(otherTexture, tiledCoords) * blendMapColor.r;
     vec4 totalColor = groundTextureColor + otherTextureColor;
 
-  //vec4 texColor = texture(groundTexture, outTextCoord) * totalColor;
-    vec4 texColor = totalColor;
-    color = texColor;
+    //OLD PIECE OF TEXTURE CALCULATION CODE
+    //vec4 texColor = texture(groundTexture, outTextCoord) * totalColor;
+
+    color = totalColor;
 }

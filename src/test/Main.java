@@ -23,6 +23,7 @@ import engine.model.terrain.Terrain;
 import engine.model.camera.CameraFPS;
 import engine.model.entity.Entity;
 import engine.model.terrain.TerrainSettings;
+import engine.util.Log;
 import org.lwjgl.glfw.GLFW;
 
 public class Main implements EngineCallback {
@@ -78,6 +79,7 @@ public class Main implements EngineCallback {
 
 	private Light light;
 	private AudioSource audioSource;
+	private Shader terrainShader;
 
 	@Override
 	public void init() {
@@ -98,9 +100,10 @@ public class Main implements EngineCallback {
 		gameEngine.showMouse(false);
 		gameEngine.setMousePosition(config.width/2, config.height/2);
 		light = new Light(shader);
+		terrainShader = new Shader("Shaders/Terrain.glsl");
 
 		TerrainSettings terrainSettings = new TerrainSettings();
-		terrainSettings.setShader(new Shader("Shaders/Terrain.glsl"));
+		terrainSettings.setShader(terrainShader);
 		terrainSettings.setLocationProjectionMatrix("projectionMatrix");
 		terrainSettings.setLocationTransformationMatrix("transformationMatrix");
 		terrainSettings.setLocationViewMatrix("viewMatrix");
@@ -108,9 +111,9 @@ public class Main implements EngineCallback {
 		//	50, 500);
 		terrainSettings.setHeightMap(new Texture("Textures/heightMap.png"));
 		terrainSettings.setBlendMap(new Texture("Textures/blendMap.png"), "blendMap");
+		terrainSettings.addOtherTerrainTexture(new Texture("Textures/mud.png"), "otherTexture");
 		terrainSettings.addOtherTerrainTexture(new Texture("Textures/grass.png"), "groundTexture");
-		terrainSettings.addOtherTerrainTexture(new Texture("Textures/highGrass.png"), "otherTexture");
-		terrain = new Terrain(terrainSettings, 50, 500);
+		terrain = new Terrain(terrainSettings, 50, 1000);
 
 		Texture texture = new Texture("Textures/stall.png");
 		Model model = modelLoader.loadModel("Objects/Stall.obj", texture);

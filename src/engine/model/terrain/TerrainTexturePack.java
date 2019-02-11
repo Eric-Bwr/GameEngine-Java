@@ -47,7 +47,6 @@ public class TerrainTexturePack {
 		if(!otherTerrainTexturesLocations.isEmpty()){
 			int current = 1;
 			for(String texture : otherTerrainTexturesLocations){
-				Log.log(current + "    " + texture);
 				shader.setUniform1i(texture, current);
 				current++;
 			}
@@ -55,19 +54,15 @@ public class TerrainTexturePack {
 	}
 
 	public void bind() {
-		if (blendTexture != null) {
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, blendTexture);
-		}
 		if(!otherTerrainTexturesLocations.isEmpty()) {
-			int current = 33985;
+			int current = 33984;
 			for (Integer id : otherTerrainTexturesIds) {
 				glActiveTexture(current);
 				glBindTexture(GL_TEXTURE_2D, id);
 				current++;
 			}
 		}
-		//TODO: glActiveTexture(GL_TEXTURE0);
+		glActiveTexture(GL_TEXTURE0);
 	}
 
 	public Shader getShader() {
