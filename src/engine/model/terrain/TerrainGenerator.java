@@ -1,7 +1,8 @@
 package engine.model.terrain;
 
-import engine.graphics.Model;
-import engine.graphics.Texture;
+import engine.graphics.rendering.Model;
+import engine.graphics.rendering.TerrainModel;
+import engine.graphics.rendering.Texture;
 import engine.maths.Vec3f;
 import engine.util.Log;
 
@@ -54,14 +55,14 @@ public class TerrainGenerator {
 				indices[pointer++] = bottomRight;
 			}
 		}
-		return new Model(texture.getTextureId(), vertices, textureCoords, normals, indices, false);
+		return new Model(texture.getID(), vertices, textureCoords, normals, indices, false);
 	}
 
-	public Model generateTerrain(Texture texture, String heightMap, float maxHeight, float size) {
+	public TerrainModel generateTerrain(TerrainTexturePack texture, float maxHeight, float size) {
 		this.maxHeight = maxHeight;
 		BufferedImage image = null;
 		try {
-			image = ImageIO.read(Class.class.getResourceAsStream("/" + heightMap));
+			image = ImageIO.read(Class.class.getResourceAsStream("/" + texture.getHeightMapTexture().getPath()));
 		} catch (IOException d) {
 			Log.logError("Failed to load heightMap");
 		}
@@ -104,7 +105,7 @@ public class TerrainGenerator {
 				indices[pointer++] = bottomRight;
 			}
 		}
-		return new Model(texture.getTextureId(), vertices, textureCoords, normals, indices, false);
+		return new TerrainModel(texture, vertices, textureCoords, normals, indices);
 	}
 
 	private Vec3f calculateNormal(int x, int z, BufferedImage image) {

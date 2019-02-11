@@ -1,6 +1,6 @@
 package engine.graphics.gui;
 
-import engine.graphics.Texture;
+import engine.graphics.rendering.Texture;
 import engine.maths.Vec2i;
 
 public class UIImage {

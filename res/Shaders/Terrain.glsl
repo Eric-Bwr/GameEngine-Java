@@ -20,13 +20,23 @@ void main() {
 #shader fragment
 #version 330 core
 
-out vec4 color;
-
 in vec2 outTextCoord;
 
-uniform sampler2D texSampler;
+out vec4 color;
+
+uniform sampler2D blendMap;
+uniform sampler2D otherTexture;
+uniform sampler2D groundTexture;
 
 void main() {
-    vec4 texColor = texture(texSampler, outTextCoord);
+    vec4 blendMapColor = texture(blendMap, outTextCoord);
+    float backTextureAmount = 1 - (blendMapColor.r);
+    vec2 tiledCoords = outTextCoord * 40.0;
+    vec4 groundTextureColor = texture(groundTexture, tiledCoords) * backTextureAmount;
+    vec4 otherTextureColor = texture(otherTexture, tiledCoords) * blendMapColor.r;
+    vec4 totalColor = groundTextureColor + otherTextureColor;
+
+  //vec4 texColor = texture(groundTexture, outTextCoord) * totalColor;
+    vec4 texColor = totalColor;
     color = texColor;
 }

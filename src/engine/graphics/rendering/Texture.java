@@ -1,4 +1,4 @@
-package engine.graphics;
+package engine.graphics.rendering;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -10,9 +10,11 @@ import static org.lwjgl.opengl.GL30.*;
 public class Texture {
 
     private int id;
+    private String path;
 
     public Texture(String path) {
         try {
+            this.path = path;
             BufferedImage image = ImageIO.read(Class.class.getResourceAsStream("/" + path));
             int[] pixels = new int[image.getWidth() * image.getHeight()];
             image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
@@ -40,6 +42,14 @@ public class Texture {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public int getID(){
+        return id;
+    }
+
+    public String getPath() {
+        return path;
     }
 
     public void bind() {

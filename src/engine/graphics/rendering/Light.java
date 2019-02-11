@@ -1,4 +1,4 @@
-package engine.graphics;
+package engine.graphics.rendering;
 
 import engine.maths.Vec3f;
 import engine.maths.Vec4f;

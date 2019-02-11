@@ -2,22 +2,20 @@ package test;
 
 import engine.EngineConfig;
 import engine.GameEngine;
-import engine.ScreenMode;
 import engine.callbacks.EngineCallback;
-import engine.callbacks.KeyCallback;
-import engine.callbacks.MouseCallback;
 import engine.graphics.*;
-import engine.graphics.gl.shadow.ShadowDephtBuffer;
+import engine.graphics.gl.shadow.ShadowDepthBuffer;
 import engine.graphics.gl.shadow.ShadowRenderer;
+import engine.graphics.rendering.Light;
+import engine.graphics.rendering.Model;
+import engine.graphics.rendering.Shader;
+import engine.graphics.rendering.Texture;
 import engine.maths.Mat4f;
 import engine.maths.Vec3f;
 import engine.maths.Vec4f;
 import engine.model.ModelLoader;
-import engine.model.camera.CameraAxis;
 import engine.model.camera.CameraFPS;
 import engine.model.entity.Entity;
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL11;
 
 public class Test implements EngineCallback {
 
@@ -41,7 +39,7 @@ public class Test implements EngineCallback {
     private CameraFPS camera;
     private Light light;
 
-    private ShadowDephtBuffer shadowDephtBuffer;
+    private ShadowDepthBuffer shadowDephtBuffer;
 
     public Test(){
         config.title = "GameEngine";
@@ -89,7 +87,7 @@ public class Test implements EngineCallback {
 
         engine.showMouse(false);
 
-        shadowDephtBuffer = new ShadowDephtBuffer(config, config.width, config.height);
+        shadowDephtBuffer = new ShadowDepthBuffer(config, config.width, config.height);
     }
 
     @Override

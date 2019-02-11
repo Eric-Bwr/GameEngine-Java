@@ -1,6 +1,5 @@
 package engine.graphics.gl.shadow;
 
-
 import java.nio.ByteBuffer;
 
 import engine.EngineConfig;
@@ -8,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
 
-public class ShadowDephtBuffer {
+public class ShadowDepthBuffer {
 
     private int frameBufferId;
     private int frameBufferTexture;
@@ -17,7 +16,7 @@ public class ShadowDephtBuffer {
     private int width;
     private int height;
 
-    public ShadowDephtBuffer(EngineConfig config, int widht, int height) {
+    public ShadowDepthBuffer(EngineConfig config, int widht, int height) {
         this.engineConfig = config;
         this.width = widht;
         this.height = height;

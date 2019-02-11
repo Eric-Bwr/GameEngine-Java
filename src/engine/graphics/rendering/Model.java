@@ -1,4 +1,4 @@
-package engine.graphics;
+package engine.graphics.rendering;
 
 import engine.graphics.gl.VertexArrayObject;
 
@@ -50,7 +50,7 @@ public class Model  {
         this.transparent = transparent;
     }
 
-    public void setUseFakeLighting(boolean useFakeLighting) {
+    public void setFakeLighting(boolean useFakeLighting) {
         this.useFakeLighting = useFakeLighting;
     }
 }

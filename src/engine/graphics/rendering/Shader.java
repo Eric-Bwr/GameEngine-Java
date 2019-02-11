@@ -1,4 +1,4 @@
-package engine.graphics;
+package engine.graphics.rendering;
 
 import engine.maths.*;
 import engine.util.Log;

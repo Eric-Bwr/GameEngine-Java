@@ -9,18 +9,20 @@ import engine.callbacks.EngineCallback;
 import engine.callbacks.FocusCallback;
 import engine.callbacks.KeyCallback;
 import engine.callbacks.MouseCallback;
-import engine.graphics.Light;
-import engine.graphics.Model;
-import engine.graphics.Shader;
-import engine.graphics.Texture;
 import engine.graphics.gl.shadow.ShadowDepthBuffer;
+import engine.graphics.rendering.Light;
+import engine.graphics.rendering.Model;
+import engine.graphics.rendering.Shader;
+import engine.graphics.rendering.Texture;
 import engine.graphics.gl.shadow.ShadowRenderer;
 import engine.maths.Mat4f;
 import engine.maths.Vec3f;
 import engine.maths.Vec4f;
 import engine.model.ModelLoader;
+import engine.model.terrain.Terrain;
 import engine.model.camera.CameraFPS;
 import engine.model.entity.Entity;
+import engine.model.terrain.TerrainSettings;
 import org.lwjgl.glfw.GLFW;
 
 public class Main implements EngineCallback {
@@ -97,9 +99,20 @@ public class Main implements EngineCallback {
 		gameEngine.setMousePosition(config.width/2, config.height/2);
 		light = new Light(shader);
 
-		terrain = new Terrain();
+		TerrainSettings terrainSettings = new TerrainSettings();
+		terrainSettings.setShader(new Shader("Shaders/Terrain.glsl"));
+		terrainSettings.setLocationProjectionMatrix("projectionMatrix");
+		terrainSettings.setLocationTransformationMatrix("transformationMatrix");
+		terrainSettings.setLocationViewMatrix("viewMatrix");
+		//terrain = new Terrain(terrainSettings, new HeightsGenerator(70, 3, 0.3f), new Texture("Textures/grass.png"),
+		//	50, 500);
+		terrainSettings.setHeightMap(new Texture("Textures/heightMap.png"));
+		terrainSettings.setBlendMap(new Texture("Textures/blendMap.png"), "blendMap");
+		terrainSettings.addOtherTerrainTexture(new Texture("Textures/grass.png"), "groundTexture");
+		terrainSettings.addOtherTerrainTexture(new Texture("Textures/highGrass.png"), "otherTexture");
+		terrain = new Terrain(terrainSettings, 50, 500);
 
-		Texture texture = new Texture("Textures/stallTexture.png");
+		Texture texture = new Texture("Textures/stall.png");
 		Model model = modelLoader.loadModel("Objects/Stall.obj", texture);
 		entity = new Entity(model, new Vec3f(40, 0, 40), 0, 0, 0, 2);
 
@@ -180,7 +193,7 @@ public class Main implements EngineCallback {
 	public void terminate() {
 		shader.cleanUpMemory();
 		entity.cleanUpMemory();
-		terrain.cleanUp();
+		terrain.cleanUpMemory();
 	}
 
 	public static void main(String[] args){

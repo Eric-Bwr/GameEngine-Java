@@ -9,7 +9,9 @@ public class KeyCallback extends GLFWKeyCallback {
 
     @Override
     public void invoke(long window, int keyCode, int scanCode, int action, int mods) {
-        keys[keyCode] = action != GLFW.GLFW_RELEASE;
+        try {
+            keys[keyCode] = action != GLFW.GLFW_RELEASE;
+        }catch (ArrayIndexOutOfBoundsException e){}
     }
 
     public boolean isKeyCode(int keyCode){

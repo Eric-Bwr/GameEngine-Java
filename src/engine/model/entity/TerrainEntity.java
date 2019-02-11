@@ -1,37 +1,59 @@
 package engine.model.entity;
 
 import engine.graphics.rendering.Model;
+import engine.graphics.rendering.TerrainModel;
 import engine.maths.Mat4f;
 import engine.maths.Vec3f;
+import engine.util.Log;
 
-public class Entity {
+public class TerrainEntity {
 
+	private TerrainModel terrainModel;
 	private Model model;
 	private Vec3f position;
-	private float rotX, rotY, rotZ;
 	private float scale;
 
-	public Entity(Model model, Vec3f position, float rotX, float rotY, float rotZ, float scale){
+	public TerrainEntity(TerrainModel model, Vec3f position, float scale){
+		this.terrainModel = model;
+		this.position = position;
+		this.scale = scale;
+	}
+
+	public TerrainEntity(Model model, Vec3f position, float scale){
 		this.model = model;
 		this.position = position;
-		this.rotX = rotX;
-		this.rotY = rotY;
-		this.rotZ = rotZ;
 		this.scale = scale;
 	}
 
 	public void draw() {
-		model.draw();
+		if(model == null)
+			terrainModel.draw();
+		else
+			model.draw();
 	}
-	
+
 	public void bind(){
-		model.bind();
+		if(model == null)
+			terrainModel.bind();
+		else
+			model.bind();
 	}
-	
+
 	public void unbind(){
-		model.unbind();
+		if(model == null)
+			terrainModel.unbind();
+		else
+			model.unbind();
 	}
-	
+
+	public TerrainModel getTerrainModel() {
+		return terrainModel;
+	}
+
+	public void setTerrainModel(TerrainModel terrainModel) {
+		this.terrainModel = terrainModel;
+	}
+
 	public Model getModel() {
 		return model;
 	}
@@ -47,30 +69,6 @@ public class Entity {
 	public void setPosition(Vec3f position) {
 		this.position = position;
 	}
-	
-	public float getRotX() {
-		return rotX;
-	}
-
-	public void setRotX(float rotX) {
-		this.rotX = rotX;
-	}
-
-	public float getRotY() {
-		return rotY;
-	}
-
-	public void setRotY(float rotY) {
-		this.rotY = rotY;
-	}
-
-	public float getRotZ() {
-		return rotZ;
-	}
-
-	public void setRotZ(float rotZ) {
-		this.rotZ = rotZ;
-	}
 
 	public float getScale() {
 		return scale;
@@ -83,14 +81,14 @@ public class Entity {
 	public Mat4f getTransformationMatrix(){
 		Mat4f transformation = Mat4f.identity();
 		Mat4f.translate(position, transformation, transformation);
-		Mat4f.rotation(rotX, new Vec3f(1, 0, 0), transformation, transformation);
-		Mat4f.rotation(rotY, new Vec3f(0, 1, 0), transformation, transformation);
-		Mat4f.rotation(rotZ, new Vec3f(0, 0, 1), transformation, transformation);
 		Mat4f.scale(new Vec3f(getScale(), getScale(), getScale()), transformation, transformation);
 		return transformation;
 	}
 
-    public void cleanUpMemory() {
-    	model.cleanUpMemory();
+	public void cleanUpMemory() {
+		if(model == null)
+			terrainModel.cleanUpMemory();
+		else
+			model.cleanUpMemory();
 	}
 }

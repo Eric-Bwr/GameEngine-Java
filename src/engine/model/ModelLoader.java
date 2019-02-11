@@ -1,7 +1,7 @@
 package engine.model;
 
-import engine.graphics.Model;
-import engine.graphics.Texture;
+import engine.graphics.rendering.Model;
+import engine.graphics.rendering.Texture;
 import engine.maths.Vec2f;
 import engine.maths.Vec3f;
 import engine.util.FileUtils;
@@ -78,8 +78,7 @@ public class ModelLoader {
         for (int i=0;i<indices.size();i++){
             indicesArray[i] = indices.get(i);
         }
-
-        return new Model(modelTexture.getTextureId(), verticesArray, textureArray, normalsArray, indicesArray, false);
+        return new Model(modelTexture.getID(), verticesArray, textureArray, normalsArray, indicesArray, false);
     }
 
     private void processVertex(String[] vertexData, List<Integer> indices,

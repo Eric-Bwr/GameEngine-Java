@@ -1,6 +1,6 @@
 package engine.graphics.gl.shadow;
 
-import engine.graphics.Shader;
+import engine.graphics.rendering.Shader;
 import engine.maths.Mat4f;
 import engine.maths.Vec3f;
 import engine.model.entity.Entity;
