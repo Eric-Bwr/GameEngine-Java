@@ -11,6 +11,8 @@ public class Texture {
 
     private int id;
     private String path;
+    private float lodBias = -0.4f;
+    //TODO: Implement Texture Atlases
 
     public Texture(String path) {
         try {
@@ -35,10 +37,12 @@ public class Texture {
 
             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-            glGenerateMipmap(GL_TEXTURE_2D);
+	        glGenerateMipmap(GL_TEXTURE_2D);
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, lodBias);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,7 +56,15 @@ public class Texture {
         return path;
     }
 
-    public void bind() {
+	public float getLodBias() {
+		return lodBias;
+	}
+
+	public void setLodBias(float lodBias) {
+		this.lodBias = lodBias;
+	}
+
+	public void bind() {
         glBindTexture(GL_TEXTURE_2D, id);
     }
 

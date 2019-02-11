@@ -18,6 +18,10 @@ public class Mathf {
         return (float) Math.cos(Math.toRadians(value));
     }
 
+    public static float floor(float value){
+        return (float) Math.floor(value);
+    }
+
     public static float tan(float value){
         return (float)Math.tan(Math.toRadians(value));
     }

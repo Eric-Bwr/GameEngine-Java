@@ -5,7 +5,7 @@ import engine.graphics.rendering.Shader;
 import engine.graphics.rendering.TerrainModel;
 import engine.graphics.rendering.Texture;
 import engine.maths.Mat4f;
-import engine.maths.Mathf;
+import static engine.maths.Mathf.*;
 import engine.maths.Vec2f;
 import engine.maths.Vec3f;
 import engine.model.entity.TerrainEntity;
@@ -144,22 +144,20 @@ public class Terrain {
     }
 
     public float getHeightOfTerrain(float worldX, float worldZ) {
-        float terrainX = worldX;// - this.x;
-        float terrainZ = worldZ;// - this.z;
         float gridSquareSize = size / (float) (heights.length - 1);
-        int gridX = (int) Math.floor(terrainX / gridSquareSize);
-        int gridZ = (int) Math.floor(terrainZ / gridSquareSize);
+        int gridX = (int) floor(worldX / gridSquareSize);
+        int gridZ = (int) floor(worldZ / gridSquareSize);
         if (gridX >= heights.length - 1 || gridZ >= heights.length - 1 || gridX < 0 || gridZ < 0) {
             return 0;
         }
-        float xCoord = (terrainX % gridSquareSize) / gridSquareSize;
-        float zCoord = (terrainZ % gridSquareSize) / gridSquareSize;
+        float xCoord = (worldX % gridSquareSize) / gridSquareSize;
+        float zCoord = (worldZ % gridSquareSize) / gridSquareSize;
         float result;
         if (xCoord <= (1 - zCoord)) {
-            result = Mathf.barryCentric(new Vec3f(0, heights[gridX][gridZ], 0), new Vec3f(1,
+            result = barryCentric(new Vec3f(0, heights[gridX][gridZ], 0), new Vec3f(1,
                 heights[gridX + 1][gridZ], 0), new Vec3f(0, heights[gridX][gridZ + 1], 1), new Vec2f(xCoord, zCoord));
         } else {
-            result = Mathf.barryCentric(new Vec3f(1, heights[gridX + 1][gridZ], 0), new Vec3f(1,
+            result = barryCentric(new Vec3f(1, heights[gridX + 1][gridZ], 0), new Vec3f(1,
                 heights[gridX + 1][gridZ + 1], 1), new Vec3f(0, heights[gridX][gridZ + 1], 1), new Vec2f(xCoord,
                 zCoord));
         }
@@ -175,7 +173,6 @@ public class Terrain {
         Vec3f normal = new Vec3f(heightL - heightR, 2f, heightD - heightU);
         normal.normalize();
         return normal;
-
     }
 
     private Vec3f calculateNormal(int x, int z, HeightsGenerator generator) {
@@ -229,5 +226,6 @@ public class Terrain {
 
     public void cleanUpMemory(){
         terrainEntity.cleanUpMemory();
+        terrainTexturePack.cleanUpMemory();
     }
 }

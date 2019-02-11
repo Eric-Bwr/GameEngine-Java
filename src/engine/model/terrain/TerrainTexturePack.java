@@ -135,6 +135,9 @@ public class TerrainTexturePack {
 	}
 
 	public void cleanUpMemory() {
+		if(heightMapTexture != null){
+			heightMapTexture.cleanUpMemory();
+		}
 		if(blendTexture != null)
 			glDeleteTextures(blendTexture);
 		if(!otherTerrainTexturesLocations.isEmpty()) {

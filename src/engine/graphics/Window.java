@@ -71,6 +71,7 @@ public class Window {
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 		glEnable(GL_DEPTH_TEST);
+		glClearColor(config.clearColor.x(), config.clearColor.y(), config.clearColor.z(), config.clearColor.w());
 		initCallbacks();
 		setIcon();
 		if(config.vsync)

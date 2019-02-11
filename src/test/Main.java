@@ -25,6 +25,10 @@ import engine.model.entity.Entity;
 import engine.model.terrain.TerrainSettings;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class Main implements EngineCallback {
 
 	private static final float FOV = 70;
@@ -79,6 +83,7 @@ public class Main implements EngineCallback {
 	private Light light;
 	private AudioSource audioSource;
 	private Shader terrainShader;
+	private List<Entity> entityList = new ArrayList<>();
 
 	@Override
 	public void init() {
@@ -115,28 +120,38 @@ public class Main implements EngineCallback {
 		terrain = new Terrain(terrainSettings, 50, 1000);
 
 		Texture texture = new Texture("Textures/stall.png");
-		Model model = modelLoader.loadModel("Objects/Stall.obj", texture);
-		entity = new Entity(model, new Vec3f(40, 0, 40), 0, 0, 0, 2);
+		Model model = modelLoader.loadModel("Objects/tree.obj", texture);
+
+		Random random = new Random();
+		for(int i = 0; i < 200; i++){
+			int x = random.nextInt(200);
+			int z = random.nextInt(200);
+			//TODO: NO ROTATION AROUND AXIS
+			entityList.add(new Entity(model, new Vec3f(x, terrain.getHeightOfTerrain(x, z), z), 0, 1, 0, 2));
+		}
 
 		//shadowRenderer = new ShadowRenderer();
 		//shadowDepthBuffer = new ShadowDepthBuffer(config.width, config.height);
 	}
 
-	boolean rot = true;
+	private boolean ground, pressed;
 
 	@Override
 	public void tick(float dt) {
+		if(kc.isKeyCode(GLFW.GLFW_KEY_RIGHT_SHIFT)){
+			if(!pressed) {
+				ground = !ground;
+				pressed = true;
+			}
+
+		}
+		pressed = false;
 /*		audioMaster.setPosition(camera.getPosition());
 		audioSource.setPosition(audioSource.getPosition().add(0.05f, 0, 0));
 		Log.log(audioSource.getPosition().x());*/
+
 		if (kc.isKeyCode(GLFW.GLFW_KEY_ESCAPE)) {
-			if(rot){
-				rot = false;
-				gameEngine.showMouse(true);
-			} else {
-				rot = true;
-			    gameEngine.showMouse(false);
-			}
+			gameEngine.stop();
 		}
 		if(kc.isKeyCode(GLFW.GLFW_KEY_W)){
 			camera.moveForward(moveSpeed);
@@ -161,24 +176,28 @@ public class Main implements EngineCallback {
 
 	@Override
 	public void render() {
-		if(rot)
-			camera.rotate(mouse.getDeltaX(), mouse.getDeltaY(), SENSITIVITY);
+		if(ground)
+			camera.setPosition(new Vec3f(camera.getPosition().x(), terrain.getHeightOfTerrain(camera.getPosition().x(),
+				camera.getPosition().z()) + 20, camera.getPosition().z()));
+		camera.rotate(mouse.getDeltaX(), mouse.getDeltaY(), SENSITIVITY);
 		mouse.reset();
 
 		//shadowRenderer.bind();
 		//shadowDepthBuffer.bind();
-		entity.bind();
+		for(Entity entity : entityList)entity.bind();
 		shader.bind();
 		light.setPosition("lightPosition", new Vec3f(40.0F, 10.0F, 40.0F));
 		light.setBrightness("lightBrightness", 3F);
 		light.setColor("lightColor", new Vec4f(1.0F, 1.0F, 1.0F, 1.0F));
 		shader.setUniformMat4f("projectionMatrix", Mat4f.projection(FOV, 4, 4, NEAR, FAR, null));
 		shader.setUniformMat4f("viewMatrix", camera.getViewMatrix());
-		shader.setUniformMat4f("transformationMatrix", entity.getTransformationMatrix());
-		entity.draw();
+		for(Entity entity : entityList) {
+			shader.setUniformMat4f("transformationMatrix", entity.getTransformationMatrix());
+			entity.draw();
+		}
 		//shadowRenderer.drawEntityWithShadow(entity, 1.0F, 7.5F);
 		shader.unbind();
-		entity.unbind();
+		for(Entity entity : entityList) entity.unbind();
 
 		terrain.begin();
 		terrain.setViewMatrix(camera.getViewMatrix());
@@ -194,7 +213,7 @@ public class Main implements EngineCallback {
 	@Override
 	public void terminate() {
 		shader.cleanUpMemory();
-		entity.cleanUpMemory();
+		for(Entity entity : entityList)entity.cleanUpMemory();
 		terrain.cleanUpMemory();
 	}
 
