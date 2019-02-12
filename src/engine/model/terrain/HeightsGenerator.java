@@ -7,11 +7,13 @@ public class HeightsGenerator {
 
 	private float amplitude, roughness;
 	private int octaves;
+	private int vertexCount;
+	private int gridX, gridZ;
 
 	private Random random = new Random();
 	private int seed;
 
-	public HeightsGenerator(int seed, float amplitude, int octaves, float roughness){
+	public HeightsGenerator(float amplitude, int octaves, float roughness, int seed){
 		this.amplitude = amplitude;
 		this.octaves = octaves;
 		this.roughness = roughness;
@@ -26,12 +28,16 @@ public class HeightsGenerator {
 	}
 
 	public float generateHeight(int x, int z){
+		int xOffset = gridX * (vertexCount - 1);
+		int zOffset = gridZ * (vertexCount - 1);
+
+
 		float total = 0;
 		float d = pow(2, octaves - 1);
 		for(int i = 0; i < octaves; i++){
 			float freq = pow(2, i) / d;
 			float amp = pow(roughness, i) * amplitude;
-			total += getInterpolatedNoise(x * freq, z * freq) * amp;
+			total += getInterpolatedNoise((x + xOffset) * freq, (z + zOffset) * freq) * amp;
 		}
 		return total;
 	}
@@ -69,5 +75,29 @@ public class HeightsGenerator {
 	private float getNoise(int x, int z) {
 		random.setSeed(x * 49632 + z * 325176 + seed);
 		return random.nextFloat() * 2f - 1f;
+	}
+
+	public void setGridX(int gridX) {
+		this.gridX = gridX;
+	}
+
+	public void setGridZ(int gridZ) {
+		this.gridZ = gridZ;
+	}
+
+	public void setVertexCount(int vertexCount) {
+		this.vertexCount = vertexCount;
+	}
+
+	public int getGridX() {
+		return gridX;
+	}
+
+	public int getGridZ() {
+		return gridZ;
+	}
+
+	public int getSeed(){
+		return seed;
 	}
 }

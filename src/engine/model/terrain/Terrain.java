@@ -28,19 +28,27 @@ public class Terrain {
     private float maxHeight;
     private float[][] heights;
     private float size;
+    private float x, z;
 
-    public Terrain(TerrainSettings settings, HeightsGenerator heightsGenerator, Texture texture, int vertexCount, float size){
+    public Terrain(int gridX, int gridZ, TerrainSettings settings, HeightsGenerator heightsGenerator, Texture texture, int vertexCount, float size){
         this.size = size;
         this.locationProjectionMatrix = settings.getLocationProjectionMatrix();
         this.locationTransformationMatrix = settings.getLocationTransformationMatrix();
         this.locationViewMatrix = settings.getLocationViewMatrix();
         this.shader = settings.getShader();
+        heightsGenerator.setVertexCount(vertexCount);
+        heightsGenerator.setGridX(gridX);
+        heightsGenerator.setGridZ(gridZ);
+        this.x = gridX * size;
+        this.z = gridZ * size;
         model = generateTerrain(texture, vertexCount, heightsGenerator);
         terrainEntity = new TerrainEntity(model, settings.getPosition(), settings.getScale());
     }
 
-    public Terrain(TerrainSettings settings, float maxHeight, float size){
+    public Terrain(int gridX, int gridZ, TerrainSettings settings, float maxHeight, float size){
         this.size = size;
+        this.x = gridX * size;
+        this.z = gridZ * size;
         this.locationProjectionMatrix = settings.getLocationProjectionMatrix();
         this.locationTransformationMatrix = settings.getLocationTransformationMatrix();
         this.locationViewMatrix = settings.getLocationViewMatrix();
@@ -144,22 +152,23 @@ public class Terrain {
     }
 
     public float getHeightOfTerrain(float worldX, float worldZ) {
+        float terrainX = worldX - this.x;
+        float terrainZ = worldZ - this.z;
         float gridSquareSize = size / (float) (heights.length - 1);
-        int gridX = (int) floor(worldX / gridSquareSize);
-        int gridZ = (int) floor(worldZ / gridSquareSize);
+        int gridX = (int) floor(terrainX / gridSquareSize);
+        int gridZ = (int) floor(terrainZ / gridSquareSize);
         if (gridX >= heights.length - 1 || gridZ >= heights.length - 1 || gridX < 0 || gridZ < 0) {
             return 0;
         }
-        float xCoord = (worldX % gridSquareSize) / gridSquareSize;
-        float zCoord = (worldZ % gridSquareSize) / gridSquareSize;
+        float xCoordinate = (terrainX % gridSquareSize) / gridSquareSize;
+        float zCoordinate = (terrainZ % gridSquareSize) / gridSquareSize;
         float result;
-        if (xCoord <= (1 - zCoord)) {
+        if (xCoordinate <= (1 - zCoordinate)) {
             result = barryCentric(new Vec3f(0, heights[gridX][gridZ], 0), new Vec3f(1,
-                heights[gridX + 1][gridZ], 0), new Vec3f(0, heights[gridX][gridZ + 1], 1), new Vec2f(xCoord, zCoord));
+                heights[gridX + 1][gridZ], 0), new Vec3f(0, heights[gridX][gridZ + 1], 1), new Vec2f(xCoordinate, zCoordinate));
         } else {
             result = barryCentric(new Vec3f(1, heights[gridX + 1][gridZ], 0), new Vec3f(1,
-                heights[gridX + 1][gridZ + 1], 1), new Vec3f(0, heights[gridX][gridZ + 1], 1), new Vec2f(xCoord,
-                zCoord));
+                heights[gridX + 1][gridZ + 1], 1), new Vec3f(0, heights[gridX][gridZ + 1], 1), new Vec2f(xCoordinate, zCoordinate));
         }
         return result;
     }

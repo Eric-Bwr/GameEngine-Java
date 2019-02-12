@@ -19,6 +19,7 @@ import engine.maths.Mat4f;
 import engine.maths.Vec3f;
 import engine.maths.Vec4f;
 import engine.model.ModelLoader;
+import engine.model.terrain.HeightsGenerator;
 import engine.model.terrain.Terrain;
 import engine.model.camera.CameraFPS;
 import engine.model.entity.Entity;
@@ -111,13 +112,14 @@ public class Main implements EngineCallback {
 		terrainSettings.setLocationProjectionMatrix("projectionMatrix");
 		terrainSettings.setLocationTransformationMatrix("transformationMatrix");
 		terrainSettings.setLocationViewMatrix("viewMatrix");
-		//terrain = new Terrain(terrainSettings, new HeightsGenerator(70, 3, 0.3f), new Texture("Textures/grass.png"),
-		//	50, 500);
-		terrainSettings.setHeightMap(new Texture("Textures/heightMap.png"));
-		terrainSettings.setBlendMap(new Texture("Textures/blendMap.png"), "blendMap");
-		terrainSettings.addOtherTerrainTexture(new Texture("Textures/mud.png"), "otherTexture");
-		terrainSettings.addOtherTerrainTexture(new Texture("Textures/grass.png"), "groundTexture");
-		terrain = new Terrain(terrainSettings, 50, 1000);
+		HeightsGenerator generator = new HeightsGenerator(70, 3, 0.3f);
+		terrain = new Terrain(0, 0, terrainSettings, generator, new Texture("Textures/grass.png"),
+			50, 500);
+		//terrainSettings.setHeightMap(new Texture("Textures/heightMap.png"));
+		//terrainSettings.setBlendMap(new Texture("Textures/blendMap.png"), "blendMap");
+		//terrainSettings.addOtherTerrainTexture(new Texture("Textures/mud.png"), "otherTexture");
+		//terrainSettings.addOtherTerrainTexture(new Texture("Textures/grass.png"), "groundTexture");
+		//terrain = new Terrain(terrainSettings, 50, 1000);
 
 		Texture texture = new Texture("Textures/stall.png");
 		Model model = modelLoader.loadModel("Objects/tree.obj", texture);
