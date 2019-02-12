@@ -53,8 +53,8 @@ public class Terrain {
         this.locationTransformationMatrix = settings.getLocationTransformationMatrix();
         this.locationViewMatrix = settings.getLocationViewMatrix();
         this.shader = settings.getShader();
-        TerrainTexturePack terrainTexturePack = new TerrainTexturePack(settings);
-        this.terrainTexturePack = terrainTexturePack;
+        terrainTexturePack = new TerrainTexturePack(settings);
+        Log.log("Set");
         terrainModel = generateTerrain(terrainTexturePack, maxHeight);
         terrainEntity = new TerrainEntity(terrainModel, settings.getPosition(), settings.getScale());
     }
@@ -235,6 +235,7 @@ public class Terrain {
 
     public void cleanUpMemory(){
         terrainEntity.cleanUpMemory();
-        terrainTexturePack.cleanUpMemory();
+        if(terrainTexturePack != null)
+            terrainTexturePack.cleanUpMemory();
     }
 }

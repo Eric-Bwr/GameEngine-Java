@@ -43,7 +43,6 @@ public class Main implements EngineCallback {
 
 	private Shader shader;
 	private Terrain terrain;
-	//private Model model;
 	private ModelLoader modelLoader = new ModelLoader();
 
 	private KeyCallback kc;
@@ -112,14 +111,14 @@ public class Main implements EngineCallback {
 		terrainSettings.setLocationProjectionMatrix("projectionMatrix");
 		terrainSettings.setLocationTransformationMatrix("transformationMatrix");
 		terrainSettings.setLocationViewMatrix("viewMatrix");
-		HeightsGenerator generator = new HeightsGenerator(70, 3, 0.3f);
-		terrain = new Terrain(0, 0, terrainSettings, generator, new Texture("Textures/grass.png"),
-			50, 500);
-		//terrainSettings.setHeightMap(new Texture("Textures/heightMap.png"));
-		//terrainSettings.setBlendMap(new Texture("Textures/blendMap.png"), "blendMap");
-		//terrainSettings.addOtherTerrainTexture(new Texture("Textures/mud.png"), "otherTexture");
-		//terrainSettings.addOtherTerrainTexture(new Texture("Textures/grass.png"), "groundTexture");
-		//terrain = new Terrain(terrainSettings, 50, 1000);
+		//HeightsGenerator generator = new HeightsGenerator(70, 3, 0.3f);
+		//terrain = new Terrain(0, 0, terrainSettings, generator, new Texture("Textures/grass.png"),
+		//	50, 500);
+		terrainSettings.setHeightMap(new Texture("Textures/heightMap.png"));
+		terrainSettings.setBlendMap(new Texture("Textures/blendMap.png"), "blendMap");
+		terrainSettings.addOtherTerrainTexture(new Texture("Textures/mud.png"), "otherTexture");
+		terrainSettings.addOtherTerrainTexture(new Texture("Textures/grass.png"), "groundTexture");
+		terrain = new Terrain(0, 0, terrainSettings, 50, 500);
 
 		Texture texture = new Texture("Textures/stall.png");
 		Model model = modelLoader.loadModel("Objects/tree.obj", texture);
