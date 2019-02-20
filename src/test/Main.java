@@ -116,8 +116,10 @@ public class Main implements EngineCallback {
 		//	50, 500);
 		terrainSettings.setHeightMap(new Texture("Textures/heightMap.png"));
 		terrainSettings.setBlendMap(new Texture("Textures/blendMap.png"), "blendMap");
-		terrainSettings.addOtherTerrainTexture(new Texture("Textures/mud.png"), "otherTexture");
 		terrainSettings.addOtherTerrainTexture(new Texture("Textures/grass.png"), "groundTexture");
+		terrainSettings.addOtherTerrainTexture(new Texture("Textures/mud.png"), "rTexture");
+		terrainSettings.addOtherTerrainTexture(new Texture("Textures/grassFlowers.png"), "gTexture");
+		terrainSettings.addOtherTerrainTexture(new Texture("Textures/path.png"), "bTexture");
 		terrain = new Terrain(0, 0, terrainSettings, 50, 500);
 
 		Texture texture = new Texture("Textures/stall.png");

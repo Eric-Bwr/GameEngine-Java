@@ -42,27 +42,25 @@ public class TerrainTexturePack {
 	}
 
 	private void connectTextureUnits() {
-		if(blendTexture != null)
-			shader.setUniform1i(locationBlendMap, 0);
+		int current = 0;
 		if(!otherTerrainTexturesLocations.isEmpty()){
-			int current = 1;
 			for(String texture : otherTerrainTexturesLocations){
 				shader.setUniform1i(texture, current);
 				current++;
 			}
 		}
+		if(blendTexture != null)
+			shader.setUniform1i(locationBlendMap, current);
 	}
 
 	public void bind() {
-		if(!otherTerrainTexturesLocations.isEmpty()) {
-			int current = 33984;
+		if(!otherTerrainTexturesIds.isEmpty()) {
+			int current = GL_TEXTURE0;
 			for (Integer id : otherTerrainTexturesIds) {
 				glActiveTexture(current);
 				glBindTexture(GL_TEXTURE_2D, id);
 				current++;
 			}
-			//TODO: SHADER BUG COULD OCCUR THROUGH THIS
-			glActiveTexture(GL_TEXTURE0);
 		}
 	}
 

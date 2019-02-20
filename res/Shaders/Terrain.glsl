@@ -26,23 +26,24 @@ out vec4 color;
 
 uniform sampler2D blendMap;
 uniform sampler2D groundTexture;
-uniform sampler2D otherTexture;
+uniform sampler2D rTexture;
+uniform sampler2D gTexture;
+uniform sampler2D bTexture;
 
 void main() {
     vec4 blendMapColor = texture(blendMap, outTextCoord);
-    //TRYING TO GET FUCKIN DEFAULT BLENDMAP BACKGROUND (BLACK)
     float backTextureAmount = 1 - (blendMapColor.r + blendMapColor.g + blendMapColor.b);
-    //FIXME!!!!!!!!!!!!!!!!INTERESTING!!!!!!!!!!   Try to * tiledCoords by 40    !!!!!!!!!!!!!!!
-    vec2 tiledCoords = outTextCoord; //TILING:* 40.0;
-    //SHOULD BE BLACK SO THE TERRAIN SHOULD BE TEXTURED IN GRASS
-    vec4 groundTextureColor = texture(groundTexture, tiledCoords) * backTextureAmount;
-    //JUST GETTING THE RED PIECE OF SHIT AKA. COLOR (TRYING)
-    vec4 otherTextureColor = texture(otherTexture, tiledCoords) * blendMapColor.r;
+    //* 40.0 == TILING THE TEXTURE; FOR GOOD LOKIN TEXTURE (Depends on terrain size)
+    vec2 tiledCoords = outTextCoord * 40.0;
+    vec4 backgroundTextureColor = texture(groundTexture, tiledCoords) * backTextureAmount;
+    vec4 rTextureColor = texture(rTexture, tiledCoords) * blendMapColor.r;
+    vec4 gTextureColor = texture(gTexture, tiledCoords) * blendMapColor.g;
+    vec4 bTextureColor = texture(bTexture, tiledCoords) * blendMapColor.b;
 
-    vec4 totalColor = groundTextureColor + otherTextureColor;
+    vec4 totalColor = backgroundTextureColor + rTextureColor + gTextureColor + bTextureColor;
 
     //OLD PIECE OF TEXTURE CALCULATION CODE
-    //vec4 texColor = texture(groundTexture, outTextCoord) * totalColor;
+    //vec4 totalColor = texture(blendMap, outTextCoord);
 
     color = totalColor;
 }

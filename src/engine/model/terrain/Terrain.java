@@ -17,6 +17,7 @@ import java.io.IOException;
 
 public class Terrain {
 
+
     private Shader shader;
     private TerrainModel terrainModel;
     private Model model;
@@ -54,7 +55,6 @@ public class Terrain {
         this.locationViewMatrix = settings.getLocationViewMatrix();
         this.shader = settings.getShader();
         terrainTexturePack = new TerrainTexturePack(settings);
-        Log.log("Set");
         terrainModel = generateTerrain(terrainTexturePack, maxHeight);
         terrainEntity = new TerrainEntity(terrainModel, settings.getPosition(), settings.getScale());
     }
@@ -237,5 +237,6 @@ public class Terrain {
         terrainEntity.cleanUpMemory();
         if(terrainTexturePack != null)
             terrainTexturePack.cleanUpMemory();
+        shader.cleanUpMemory();
     }
 }
